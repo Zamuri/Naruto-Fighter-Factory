@@ -716,6 +716,127 @@ img,svg,canvas{max-width:100%;height:auto;}
   .theme-sigil-mask{width:145px;height:145px;top:-18px;right:-12px;}
 }
 
+
+/* --- V8 routing/navigator + clean Obito background --- */
+.ff-theme-scene.obito-scene{
+  height:110px !important;
+  background:
+    radial-gradient(circle at 80% 50%,rgba(145,98,255,.13),transparent 32%),
+    radial-gradient(circle at 16% 70%,rgba(255,141,24,.18),transparent 28%),
+    linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.20)) !important;
+}
+.obito-mask-bg{
+  position:absolute;
+  right:clamp(6px,4vw,38px);
+  top:-48px;
+  width:min(330px,58vw);
+  opacity:.48;
+  transform:rotate(-7deg);
+  pointer-events:none;
+}
+.theme-sigil,.theme-sigil-fox,.theme-sigil-mask{display:none !important}
+.scene-aura{pointer-events:none}
+.route-panel{
+  margin:12px 0;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,170,72,.18);
+  background:rgba(0,0,0,.18);
+  color:#ffe6bd;
+}
+.route-panel b{display:block;margin-bottom:6px;color:#fff0c0}
+.asset-navigator{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto auto;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  margin:0 0 12px;
+  border-radius:16px;
+  border:1px solid rgba(255,170,72,.20);
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.16));
+  max-width:100%;
+}
+.asset-arrow{
+  width:42px;
+  height:42px;
+  padding:0 !important;
+  display:grid;
+  place-items:center;
+  font-size:28px !important;
+  font-weight:900;
+  border-radius:14px !important;
+}
+.asset-current{min-width:0}
+.asset-kind{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#d9c4aa;
+  font-weight:800;
+}
+.asset-name{
+  margin-top:2px;
+  font:700 15px/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;
+  color:#fff2c4;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.asset-count{font-size:12px;color:#d9c4aa;margin-top:2px}
+.asset-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.asset-actions button{white-space:nowrap}
+.mode-filebar .upload-btn.compact-add{flex:0 0 auto;min-width:72px}
+#spriteTable tbody:empty::after{
+  content:"No PNG frame loaded yet. If the project only has SFF, use Inspector or SFF tools. PNG frames from ZIP will appear here.";
+  display:block;
+  padding:12px;
+  color:#555;
+}
+@media(max-width:720px){
+  .asset-navigator{
+    grid-template-columns:auto minmax(0,1fr) auto;
+  }
+  .asset-actions{
+    grid-column:1 / -1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .asset-actions button{width:100%;font-size:13px;padding:10px 8px !important}
+  .asset-arrow{width:38px;height:38px;font-size:24px !important}
+  .obito-mask-bg{width:58vw;right:-6px;top:-26px;opacity:.36}
+  .ff-theme-scene.obito-scene{height:96px !important}
+}
+@media(max-width:430px){
+  .asset-actions{grid-template-columns:1fr}
+  .asset-name{font-size:13px}
+}
+
+
+/* --- V9 true SFF/SND extracted asset navigator --- */
+.asset-kind{color:#ffdca2 !important}
+.asset-name{color:#fff6cb !important}
+.asset-count{color:#dfc8aa !important}
+.asset-navigator{border-color:rgba(255,170,72,.28) !important}
+
+
+/* --- V11 stable MUGEN internals parser + responsive editor --- */
+html,body{max-width:100%;overflow-x:hidden!important}
+.wrap{width:100%;max-width:1460px;margin:0 auto;overflow-x:hidden}
+.hero h1{font-size:clamp(34px,5.4vw,54px)!important;font-weight:1000!important;line-height:.96!important;font-style:italic;letter-spacing:-.03em!important;text-shadow:0 3px 0 rgba(116,48,6,.65),0 6px 20px rgba(0,0,0,.25)!important}
+.ff-theme-scene.obito-scene{height:108px!important;background:radial-gradient(circle at 80% 50%,rgba(145,98,255,.12),transparent 32%),radial-gradient(circle at 16% 70%,rgba(255,141,24,.15),transparent 28%),linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.20))!important}
+.obito-mask-bg{position:absolute;right:clamp(6px,4vw,38px);top:-48px;width:min(330px,58vw);opacity:.43;transform:rotate(-7deg);pointer-events:none}.theme-sigil,.theme-sigil-fox,.theme-sigil-mask{display:none!important}.scene-aura{pointer-events:none}
+.route-panel{margin:12px 0;padding:12px;border-radius:14px;border:1px solid rgba(255,170,72,.18);background:rgba(0,0,0,.18);color:#ffe6bd}.route-panel b{display:block;margin-bottom:6px;color:#fff0c0}
+.asset-navigator{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px;margin:0 0 12px;border-radius:16px;border:1px solid rgba(255,170,72,.28);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.16));max-width:100%}.asset-arrow{width:42px;height:42px;padding:0!important;display:grid;place-items:center;font-size:28px!important;font-weight:900;border-radius:14px!important}.asset-current{min-width:0}.asset-kind{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#ffdca2!important;font-weight:800}.asset-name{margin-top:2px;font:700 15px/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;color:#fff6cb!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.asset-count{font-size:12px;color:#dfc8aa!important;margin-top:2px}.asset-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.asset-actions button{white-space:nowrap}.parse-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:rgba(0,0,0,.28);border:1px solid rgba(255,170,72,.20);font-size:11px;color:#ffe6bd}
+@media(max-width:980px){.layout{grid-template-columns:1fr!important}.sidebar{min-height:auto!important;border-right:0!important;border-bottom:1px solid rgba(255,170,72,.18)!important}.hero-top{display:flex!important;flex-direction:column;align-items:flex-start!important}.brand{width:100%}.dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.project-grid,.split,.sprite-focus{grid-template-columns:1fr!important}}
+@media(max-width:720px){.wrap{padding:0!important}.hero{border-radius:0!important}.hero-top{padding:10px 12px!important}.hero h1{font-size:clamp(30px,7.6vw,44px)!important}.ff-menubar,.ff-toolbar,.ff-toolbar-sub{overflow-x:auto;scrollbar-width:none}.ff-menubar::-webkit-scrollbar,.ff-toolbar::-webkit-scrollbar,.ff-toolbar-sub::-webkit-scrollbar{display:none}.layout{border-radius:0!important;border-left:0!important;border-right:0!important}.panel{min-height:auto!important;margin:0 8px 8px!important}.tabs{margin:8px 8px 0!important;overflow-x:auto;scrollbar-width:none}.tab{flex:0 0 auto}.asset-navigator{grid-template-columns:auto minmax(0,1fr) auto}.asset-actions{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}.asset-actions button{width:100%;font-size:13px;padding:10px 8px!important}.asset-arrow{width:38px;height:38px;font-size:24px!important}.obito-mask-bg{width:58vw;right:-6px;top:-26px;opacity:.32}.ff-theme-scene.obito-scene{height:94px!important}.app-footer{width:calc(100% - 16px);grid-template-columns:1fr!important;text-align:center}}
+@media(max-width:430px){.asset-actions{grid-template-columns:1fr}.asset-name{font-size:13px}.dash-grid,.kv{grid-template-columns:1fr!important}}
+
 </style>
 </head>
 <body class="theme-naruto">
@@ -791,45 +912,29 @@ img,svg,canvas{max-width:100%;height:auto;}
     </div>
 
 
-    <div class="ff-theme-scene" aria-label="Kyubi and Tobi themed background">
+    <div class="ff-theme-scene obito-scene" aria-label="Obito mask background">
       <div class="scene-aura aura-left"></div>
       <div class="scene-aura aura-right"></div>
-      <div class="theme-sigil theme-sigil-fox">
-        <svg viewBox="0 0 430 180" aria-hidden="true">
+      <div class="obito-mask-bg">
+        <svg viewBox="0 0 420 210" aria-hidden="true">
           <defs>
-            <linearGradient id="foxFaceFill" x1="0" x2="1">
-              <stop offset="0%" stop-color="#ffbf47"/>
-              <stop offset="100%" stop-color="#ff7b18"/>
+            <radialGradient id="obitoMaskGlowV11" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#ffad45" stop-opacity=".62"/>
+              <stop offset="58%" stop-color="#ff7b1a" stop-opacity=".23"/>
+              <stop offset="100%" stop-color="#120a08" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="obitoStrokeV11" x1="0" x2="1">
+              <stop offset="0%" stop-color="rgba(255,232,180,.44)"/>
+              <stop offset="100%" stop-color="rgba(255,150,60,.27)"/>
             </linearGradient>
           </defs>
-          <path d="M34 134c46-58 98-86 181-86 85 0 147 27 194 86-45-21-99-31-194-31-93 0-146 9-181 31Z" fill="rgba(255,137,24,.20)"/>
-          <path d="M78 120c35-31 78-46 138-46 62 0 109 15 146 47-32-14-74-21-146-21-69 0-107 5-138 20Z" fill="rgba(255,208,94,.18)"/>
-          <path d="M78 77c30-24 62-30 112-18 11 3 21 7 31 15-23-2-41 0-68 8-26 7-48 5-75-5Z" fill="url(#foxFaceFill)" opacity=".95"/>
-          <path d="M244 74c11-8 21-12 31-15 50-12 82-6 112 18-27 10-49 12-75 5-27-8-45-10-68-8Z" fill="url(#foxFaceFill)" opacity=".95"/>
-          <path d="M52 83c31-18 72-20 116-8" stroke="rgba(255,245,214,.84)" stroke-width="10" stroke-linecap="round" fill="none"/>
-          <path d="M263 75c44-12 85-10 116 8" stroke="rgba(255,245,214,.84)" stroke-width="10" stroke-linecap="round" fill="none"/>
-          <ellipse cx="148" cy="101" rx="9" ry="9" fill="rgba(255,244,215,.72)"/>
-          <ellipse cx="282" cy="101" rx="9" ry="9" fill="rgba(255,244,215,.72)"/>
-          <path d="M146 129c25-6 99-6 124 0" stroke="rgba(255,241,194,.58)" stroke-width="10" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-      <div class="theme-sigil theme-sigil-mask">
-        <svg viewBox="0 0 360 360" aria-hidden="true">
-          <defs>
-            <radialGradient id="maskHalo" cx="50%" cy="50%" r="58%">
-              <stop offset="0%" stop-color="#ffb347" stop-opacity=".56"/>
-              <stop offset="65%" stop-color="#ff7b1a" stop-opacity=".21"/>
-              <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="180" cy="180" r="136" fill="url(#maskHalo)"/>
-          <circle cx="180" cy="180" r="120" fill="none" stroke="rgba(255,234,196,.26)" stroke-width="16"/>
-          <circle cx="180" cy="180" r="90" fill="none" stroke="rgba(18,10,10,.46)" stroke-width="12"/>
-          <path d="M112 109c40-22 94-22 136 0" stroke="rgba(255,240,205,.25)" stroke-width="12" stroke-linecap="round" fill="none"/>
-          <path d="M116 118c56 15 98 54 122 116" stroke="rgba(255,237,186,.22)" stroke-width="15" stroke-linecap="round" fill="none"/>
-          <path d="M137 95c20 8 31 20 43 34" stroke="rgba(255,238,190,.16)" stroke-width="9" stroke-linecap="round" fill="none"/>
-          <path d="M223 95c-20 8-31 20-43 34" stroke="rgba(255,238,190,.16)" stroke-width="9" stroke-linecap="round" fill="none"/>
-          <ellipse cx="214" cy="165" rx="28" ry="28" fill="rgba(10,6,7,.62)"/>
+          <ellipse cx="210" cy="105" rx="160" ry="92" fill="url(#obitoMaskGlowV11)"/>
+          <ellipse cx="210" cy="105" rx="118" ry="74" fill="none" stroke="rgba(255,225,175,.18)" stroke-width="16"/>
+          <ellipse cx="210" cy="105" rx="78" ry="48" fill="none" stroke="rgba(25,12,10,.40)" stroke-width="12"/>
+          <path d="M112 93c58 9 92 39 118 82" fill="none" stroke="url(#obitoStrokeV11)" stroke-width="14" stroke-linecap="round"/>
+          <path d="M137 63c32 20 55 43 75 79" fill="none" stroke="rgba(255,236,190,.18)" stroke-width="10" stroke-linecap="round"/>
+          <circle cx="237" cy="96" r="26" fill="rgba(10,7,7,.64)"/>
+          <circle cx="237" cy="96" r="10" fill="rgba(255,175,65,.18)"/>
         </svg>
       </div>
     </div>
@@ -917,6 +1022,13 @@ img,svg,canvas{max-width:100%;height:auto;}
               <div class="quick-card"><b>Inspector</b><div class="small">Cek signature SWF, SFF, SND, serta scan isi biner dasar.</div></div>
               <div class="quick-card"><b>Export Center</b><div class="small">Ekspor PNG pack, audio pack, project MUGEN, atau semua hasil.</div></div>
             </div>
+            <div id="projectRoutingList" class="route-panel small">
+              <b>Project contents</b>
+              <div id="routeSpriteInfo">Sprite: 0</div>
+              <div id="routeSoundInfo">Sound: 0</div>
+              <div id="routeTextInfo">Text: 0</div>
+              <div id="routeProjectInfo">Project files: 0</div>
+            </div>
             <h3>Activity Log</h3>
             <div id="swfLog" class="status mono small"></div>
           </div>
@@ -984,9 +1096,22 @@ img,svg,canvas{max-width:100%;height:auto;}
       <section id="tab-sprite" class="panel tabpane hide">
         <h2>Sprite Edit</h2>
         <div class="mode-filebar">
-          <label class="upload-btn"><input id="spriteInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.gif"><span>🖼️</span> Add Sprite / PNG</label>
-          <label class="upload-btn"><input id="sffInput" type="file" multiple accept=".sff"><span>🧩</span> Add SFF</label>
+          <label class="upload-btn"><input id="spriteInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.gif"><span>🖼️</span> Add Sprite / PNG / SFF</label>
+          <label class="upload-btn compact-add"><input id="sffInput" type="file" multiple accept=".sff"><span>🧩</span> SFF</label>
           <span class="small">Sprite bisa di-zoom sampai level pixel dan bisa diwarnai.</span>
+        </div>
+        <div class="asset-navigator sprite-navigator">
+          <button id="btnPrevSprite" class="asset-arrow">‹</button>
+          <div class="asset-current">
+            <div class="asset-kind">Selected Frame</div>
+            <div id="spriteFrameName" class="asset-name">&lt; No sprite loaded &gt;</div>
+            <div id="spriteFrameCount" class="asset-count">0 frame</div>
+          </div>
+          <button id="btnNextSprite" class="asset-arrow">›</button>
+          <div class="asset-actions">
+            <button id="btnDownloadSpriteSingle" class="primary">Download Single</button>
+            <button id="btnDownloadSpriteAll" class="good">Download All Frames</button>
+          </div>
         </div>
         <div class="pixel-editor-panel">
           <div class="pixel-toolbar">
@@ -1035,6 +1160,19 @@ img,svg,canvas{max-width:100%;height:auto;}
         <div class="mode-filebar">
           <label class="upload-btn"><input id="soundInput" type="file" multiple accept=".wav,.mp3,.ogg,.snd"><span>🔊</span> Add Sound / SND</label>
           <span class="small">Mode sound punya input sendiri, jadi tidak tercampur dengan sprite.</span>
+        </div>
+        <div class="asset-navigator sound-navigator">
+          <button id="btnPrevSound" class="asset-arrow">‹</button>
+          <div class="asset-current">
+            <div class="asset-kind">Selected Sound</div>
+            <div id="soundFrameName" class="asset-name">&lt; No sound loaded &gt;</div>
+            <div id="soundFrameCount" class="asset-count">0 sound</div>
+          </div>
+          <button id="btnNextSound" class="asset-arrow">›</button>
+          <div class="asset-actions">
+            <button id="btnDownloadSoundSingle" class="primary">Download Single</button>
+            <button id="btnDownloadSoundAll" class="good">Download All Sounds</button>
+          </div>
         </div>
         <div class="row">
           <button id="btnCollectAudio" class="primary">Refresh Audio List</button>
@@ -1409,218 +1547,91 @@ updateSummary(); renderFiles(); renderOutputs(); renderTextSelect(); renderSprit
 
 <script>
 (function(){
-  function bindModeFileInputs(){
-    ['projectInput','swfInput','spriteInput','sffInput','soundInput','inspectInput','textInput'].forEach(function(id){
-      var el=document.getElementById(id);
-      if(el && !el.dataset.bound){
-        el.dataset.bound='1';
-        el.addEventListener('change',function(e){
-          if(typeof addFiles==='function') addFiles(e.target.files);
-        });
+  const imageExts = ['png','jpg','jpeg','webp','gif'];
+  const audioExts = ['wav','mp3','ogg'];
+  let frameIndex = 0, soundIndex = 0, parsing = false;
+
+  function u16(u,o){return (u[o]|(u[o+1]<<8))>>>0}
+  function u32(u,o){return (u[o]|(u[o+1]<<8)|(u[o+2]<<16)|(u[o+3]<<24))>>>0}
+  function i16(u,o){const v=u16(u,o);return v&0x8000?v-0x10000:v}
+  function ascii(u,o,n){let s='';for(let i=0;i<n&&o+i<u.length;i++){const c=u[o+i];if(c===0)break;s+=String.fromCharCode(c)}return s}
+  function baseName(p){return String(p||'file').split('/').pop()}
+  function noExt(p){return baseName(p).replace(/\.[^.]+$/,'')}
+  function ext(p){return (String(p||'').split('.').pop()||'').toLowerCase()}
+  function safe(p){return String(p||'file').replace(/[\\/:*?"<>|]+/g,'_')}
+  function log2(msg,cls){if(typeof log==='function')log(msg,cls||'')}
+  function sleep(){return new Promise(r=>setTimeout(r,0))}
+  function outputExists(path){return state.outputs.some(o=>o.path===path)}
+  function addOut(path,data,type,meta){if(outputExists(path))return false;state.outputs.push({path,data,type:type||mimeFor(path),meta:meta||{}});return true}
+  function entries(){return (state.outputs||[]).map(o=>({name:o.path,ext:ext(o.path),data:asU8(o.data),meta:o.meta||{},raw:o}))}
+  function frames(){return entries().filter(e=>e.meta.kind==='sffFrame'||(imageExts.includes(e.ext)&&!e.meta.kind))}
+  function sounds(){return entries().filter(e=>e.meta.kind==='sndSound'||(audioExts.includes(e.ext)&&!e.meta.kind))}
+  function texts(){return (state.files||[]).concat(state.outputs||[]).filter(x=>['def','cmd','cns','air','st','txt'].includes(ext(x.name||x.path||'')))}
+  function sffFiles(){return (state.files||[]).filter(f=>ext(f.name)==='sff')}
+  function sndFiles(){return (state.files||[]).filter(f=>ext(f.name)==='snd')}
+
+  async function canvasPng(canvas){const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));return new Uint8Array(await blob.arrayBuffer())}
+  async function pcxToPng(pcx){
+    if(!pcx||pcx.length<128||pcx[0]!==0x0A)return null;
+    const bpp=pcx[3], xmin=u16(pcx,4), ymin=u16(pcx,6), xmax=u16(pcx,8), ymax=u16(pcx,10);
+    const w=xmax-xmin+1,h=ymax-ymin+1,planes=pcx[65],bpl=u16(pcx,66);
+    if(w<=0||h<=0||w>8192||h>8192||!bpl)return null;
+    const rowBytes=bpl*planes, expected=rowBytes*h;
+    let palOff=-1;if(pcx.length>=769&&pcx[pcx.length-769]===12)palOff=pcx.length-768;
+    const end=palOff>0?palOff-1:pcx.length, raw=new Uint8Array(expected);let p=128,q=0;
+    while(p<end&&q<expected){let c=pcx[p++],count=1,val=c;if((c&0xC0)===0xC0){count=c&0x3F;val=pcx[p++]}while(count-->0&&q<expected)raw[q++]=val}
+    const can=document.createElement('canvas');can.width=w;can.height=h;const ctx=can.getContext('2d');const img=ctx.createImageData(w,h);const d=img.data;
+    if(bpp===8&&planes===1&&palOff>0){const pal=pcx.slice(palOff,palOff+768);for(let y=0;y<h;y++){const row=y*rowBytes;for(let x=0;x<w;x++){const idx=raw[row+x],pi=idx*3,di=(y*w+x)*4;d[di]=pal[pi]||0;d[di+1]=pal[pi+1]||0;d[di+2]=pal[pi+2]||0;d[di+3]=idx===0?0:255}}}
+    else if(bpp===8&&planes>=3){for(let y=0;y<h;y++){const row=y*rowBytes;for(let x=0;x<w;x++){const di=(y*w+x)*4;d[di]=raw[row+x];d[di+1]=raw[row+bpl+x];d[di+2]=raw[row+bpl*2+x];d[di+3]=planes>=4?raw[row+bpl*3+x]:255}}}
+    else return null;
+    ctx.putImageData(img,0,0);return await canvasPng(can)
+  }
+  async function parseSff(f){
+    if(f._v11Parsed||!f.u8||ascii(f.u8,0,12)!=='ElecbyteSpr')return 0;f._v11Parsed=true;
+    const u=f.u8, base=safe(noExt(f.name));const groups=u32(u,16), count=u32(u,20), first=u32(u,24), sub=u32(u,28)||32;let added=0;let rows=[];
+    if(first<=0||first>=u.length||sub<28||sub>128){log2('SFF tidak bisa dibaca tabel subfile: '+f.name,'err');return 0}
+    log2('Membaca isi SFF: '+f.name+' | '+count+' subfile','warnc');
+    let off=first;
+    for(let i=0;i<Math.max(count+5,100);i++){
+      if(!off||off+sub>u.length)break;
+      const next=u32(u,off),len=u32(u,off+4),axisX=i16(u,off+8),axisY=i16(u,off+10),group=i16(u,off+12),image=i16(u,off+14),linked=u16(u,off+16),samePal=u[off+18]||0;
+      let status='empty';
+      if(len>0&&off+sub+len<=u.length){
+        const pcx=u.slice(off+sub,off+sub+len);
+        try{const png=await pcxToPng(pcx);if(png){const path=`parsed_sff/${base}/${String(group).padStart(4,'0')}_${String(image).padStart(4,'0')}_${String(i).padStart(5,'0')}.png`;if(addOut(path,png,'image/png',{kind:'sffFrame',source:f.name,index:i,group,image,axisX,axisY,linked,samePal}))added++;status='frame-png'}else status='pcx-unsupported'}catch(e){status='decode-error'}
       }
-    });
-  }
-  bindModeFileInputs();
-  setTimeout(bindModeFileInputs, 300);
-
-  var pixelTool='pencil';
-  var pixelCanvas, pixelCtx, pixelName='', pixelLoaded=false;
-  var undoStack=[];
-  function getPixelCanvas(){
-    pixelCanvas=document.getElementById('pixelCanvas');
-    if(pixelCanvas) pixelCtx=pixelCanvas.getContext('2d', {willReadFrequently:true});
-    return pixelCanvas;
-  }
-  function getSelectedSpriteData(){
-    if(typeof state==='undefined') return null;
-    if(state.spriteSelection==null || !state.sprites[state.spriteSelection]) return null;
-    var s=state.sprites[state.spriteSelection];
-    var list=getPngLikeFiles();
-    var im=list.find(function(x){return x.name===s.name});
-    if(!im) return null;
-    return {sprite:s,img:im};
-  }
-  async function loadPixelSprite(){
-    if(!getPixelCanvas()) return;
-    var data=getSelectedSpriteData();
-    if(!data){ alert('Pilih sprite dulu dari tabel Sprite Edit atau preview PNG.'); return; }
-    var blob=new Blob([data.img.data],{type:mimeFor(data.img.name)});
-    var bmp;
-    try{ bmp=await createImageBitmap(blob); }
-    catch(e){ alert('Sprite tidak bisa dibuka di canvas.'); return; }
-    pixelName=data.sprite.name;
-    pixelCanvas.width=bmp.width;
-    pixelCanvas.height=bmp.height;
-    pixelCtx.clearRect(0,0,bmp.width,bmp.height);
-    pixelCtx.drawImage(bmp,0,0);
-    pixelLoaded=true;
-    undoStack=[];
-    updatePixelZoom();
-    var info=document.getElementById('pixelInfo');
-    if(info) info.textContent='Loaded: '+pixelName+' | '+bmp.width+'x'+bmp.height+' px. Gunakan zoom untuk melihat pixel 1x.';
-  }
-  function updatePixelZoom(){
-    if(!getPixelCanvas()) return;
-    var z=document.getElementById('pixelZoom');
-    var t=document.getElementById('pixelZoomText');
-    var zoom=parseInt(z&&z.value || '8') || 8;
-    pixelCanvas.style.width=(pixelCanvas.width*zoom)+'px';
-    pixelCanvas.style.height=(pixelCanvas.height*zoom)+'px';
-    if(t) t.textContent=zoom+'x';
-    var shell=document.querySelector('.pixel-canvas-shell');
-    if(shell){
-      shell.style.backgroundSize=(Math.max(4,zoom))+'px '+(Math.max(4,zoom))+'px';
+      rows.push(`${i},${group},${image},${axisX},${axisY},${len},${linked},${samePal},${status}`);
+      if(i%30===0){updateParseStatus(`SFF ${base}: ${added}/${count} frame`);await sleep()}
+      if(!next||next===off||next>=u.length)break;off=next;
     }
+    addOut(`parsed_sff/${base}/_frames.csv`,'index,group,image,axisX,axisY,length,linked,samePalette,status\n'+rows.join('\n'),'text/csv',{kind:'sffIndex',source:f.name,groups,count});
+    log2('SFF selesai: '+base+' -> '+added+' frame','ok');return added;
   }
-  function pushUndo(){
-    if(!pixelLoaded || !pixelCtx) return;
-    try{
-      undoStack.push(pixelCtx.getImageData(0,0,pixelCanvas.width,pixelCanvas.height));
-      if(undoStack.length>20) undoStack.shift();
-    }catch(e){}
-  }
-  function canvasPos(ev){
-    var rect=pixelCanvas.getBoundingClientRect();
-    var x=Math.floor((ev.clientX-rect.left) * pixelCanvas.width / rect.width);
-    var y=Math.floor((ev.clientY-rect.top) * pixelCanvas.height / rect.height);
-    return {x:Math.max(0,Math.min(pixelCanvas.width-1,x)), y:Math.max(0,Math.min(pixelCanvas.height-1,y))};
-  }
-  function paintAt(ev){
-    if(!pixelLoaded) return;
-    var p=canvasPos(ev);
-    if(pixelTool==='picker'){
-      var d=pixelCtx.getImageData(p.x,p.y,1,1).data;
-      var hex='#'+[d[0],d[1],d[2]].map(function(v){return v.toString(16).padStart(2,'0')}).join('');
-      var c=document.getElementById('paintColor'); if(c) c.value=hex;
-      return;
+  function parseSnd(f){
+    if(f._v11Parsed||!f.u8||ascii(f.u8,0,12)!=='ElecbyteSnd')return 0;f._v11Parsed=true;
+    const u=f.u8,base=safe(noExt(f.name)),count=u32(u,16);let off=u32(u,20),added=0,rows=[];
+    log2('Membaca isi SND: '+f.name+' | '+count+' subfile','warnc');
+    for(let i=0;i<Math.max(count+5,100);i++){
+      if(!off||off+16>u.length)break;
+      const next=u32(u,off),len=u32(u,off+4),group=u32(u,off+8),sample=u32(u,off+12);let status='empty';
+      if(len>0&&off+16+len<=u.length){const data=u.slice(off+16,off+16+len);const isWav=data[0]===0x52&&data[1]===0x49&&data[2]===0x46&&data[3]===0x46;const ex=isWav?'wav':'bin';const path=`parsed_snd/${base}/${String(group).padStart(4,'0')}_${String(sample).padStart(4,'0')}_${String(i).padStart(5,'0')}.${ex}`;if(addOut(path,data,isWav?'audio/wav':'application/octet-stream',{kind:'sndSound',source:f.name,index:i,group,sample,format:ex}))added++;status=ex}
+      rows.push(`${i},${group},${sample},${len},${status}`);if(i%25===0)updateParseStatus(`SND ${base}: ${added}/${count} sound`);if(!next||next===off||next>=u.length)break;off=next;
     }
-    if(pixelTool==='eraser'){
-      pixelCtx.clearRect(p.x,p.y,1,1);
-      return;
-    }
-    var color=(document.getElementById('paintColor')||{}).value || '#ff8d18';
-    pixelCtx.fillStyle=color;
-    pixelCtx.fillRect(p.x,p.y,1,1);
+    addOut(`parsed_snd/${base}/_sounds.csv`,'index,group,sample,length,status\n'+rows.join('\n'),'text/csv',{kind:'sndIndex',source:f.name,count});
+    log2('SND selesai: '+base+' -> '+added+' sound','ok');return added;
   }
-  function saveEditedSprite(){
-    if(!pixelLoaded){ alert('Load sprite dulu.'); return; }
-    pixelCanvas.toBlob(function(blob){
-      blob.arrayBuffer().then(function(ab){
-        addOutput('edited_sprites/'+(pixelName||'edited_sprite.png'), new Uint8Array(ab), 'image/png');
-        if(typeof log==='function') log('Edited sprite disimpan: '+pixelName,'ok');
-      });
-    }, 'image/png');
-  }
-  function copyEditedSprite(){
-    if(!pixelLoaded){ alert('Load sprite dulu.'); return; }
-    pixelCanvas.toBlob(async function(blob){
-      try{
-        if(navigator.clipboard && window.ClipboardItem){
-          await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
-          if(typeof log==='function') log('Sprite PNG dicopy ke clipboard.','ok');
-        }else{
-          var a=document.createElement('a');
-          a.href=URL.createObjectURL(blob); a.download=pixelName||'edited_sprite.png';
-          document.body.appendChild(a); a.click(); a.remove();
-        }
-      }catch(e){
-        var a=document.createElement('a');
-        a.href=URL.createObjectURL(blob); a.download=pixelName||'edited_sprite.png';
-        document.body.appendChild(a); a.click(); a.remove();
-      }
-    }, 'image/png');
-  }
-  function initPixelEditor(){
-    if(!getPixelCanvas()) return;
-    var z=document.getElementById('pixelZoom');
-    if(z && !z.dataset.bound){z.dataset.bound='1'; z.addEventListener('input', updatePixelZoom);}
-    var btn=document.getElementById('btnLoadPixel'); if(btn && !btn.dataset.bound){btn.dataset.bound='1'; btn.addEventListener('click', loadPixelSprite);}
-    var b1=document.getElementById('btnPencil'); if(b1 && !b1.dataset.bound){b1.dataset.bound='1'; b1.addEventListener('click',function(){pixelTool='pencil'});}
-    var b2=document.getElementById('btnEraser'); if(b2 && !b2.dataset.bound){b2.dataset.bound='1'; b2.addEventListener('click',function(){pixelTool='eraser'});}
-    var b3=document.getElementById('btnPicker'); if(b3 && !b3.dataset.bound){b3.dataset.bound='1'; b3.addEventListener('click',function(){pixelTool='picker'});}
-    var bs=document.getElementById('btnSaveSpriteEdit'); if(bs && !bs.dataset.bound){bs.dataset.bound='1'; bs.addEventListener('click', saveEditedSprite);}
-    var bc=document.getElementById('btnCopySprite'); if(bc && !bc.dataset.bound){bc.dataset.bound='1'; bc.addEventListener('click', copyEditedSprite);}
-    if(!pixelCanvas.dataset.paintBound){
-      pixelCanvas.dataset.paintBound='1';
-      var drawing=false;
-      pixelCanvas.addEventListener('mousedown',function(ev){ if(!pixelLoaded) return; pushUndo(); drawing=true; paintAt(ev); });
-      window.addEventListener('mouseup',function(){ drawing=false; });
-      pixelCanvas.addEventListener('mousemove',function(ev){ if(drawing) paintAt(ev); });
-      pixelCanvas.addEventListener('contextmenu',function(ev){
-        ev.preventDefault();
-        if(undoStack.length && pixelCtx){
-          var last=undoStack.pop();
-          pixelCtx.putImageData(last,0,0);
-        }
-      });
-    }
-    updatePixelZoom();
-  }
-  initPixelEditor();
-  setTimeout(initPixelEditor, 300);
-
-  try{
-    var originalSelectSprite=selectSprite;
-    selectSprite=function(i){
-      originalSelectSprite(i);
-      setTimeout(function(){
-        var info=document.getElementById('pixelInfo');
-        if(info && state && state.sprites && state.sprites[i]) info.textContent='Selected: '+state.sprites[i].name+' | Tekan Load Selected Sprite untuk edit pixel.';
-      },0);
-    };
-  }catch(e){}
-})();
-</script>
-
-
-<script>
-(function(){
-  const themeNames={naruto:'Naruto',sasuke:'Sasuke / Sakura',hinata:'Hinata',kakashi:'Kakashi',sai:'Sai',yamato:'Yamato'};
-  function setTheme(name){
-    const body=document.body;
-    body.classList.remove('theme-naruto','theme-sasuke','theme-hinata','theme-kakashi','theme-sai','theme-yamato');
-    body.classList.add('theme-'+name);
-    document.querySelectorAll('.theme-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.theme===name));
-    const dashTheme=document.querySelector('.dash-grid .stat-card:last-child b'); if(dashTheme) dashTheme.textContent=themeNames[name]||name;
-    const statusTheme=[...document.querySelectorAll('.ff-statusbar span')].find(x=>x.textContent.startsWith('Theme:')); if(statusTheme) statusTheme.textContent='Theme: '+(themeNames[name]||name);
-    try{localStorage.setItem('nff_theme',name)}catch(e){}
-  }
-  document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>setTheme(btn.dataset.theme)));
-  try{const saved=localStorage.getItem('nff_theme'); if(saved && themeNames[saved]) setTheme(saved);}catch(e){}
-
-  const routeMap={project:['def','cmd','cns','air','st','act','txt','zip'],sprite:['png','jpg','jpeg','webp','gif','sff'],sound:['wav','mp3','ogg','snd'],swf:['swf'],inspect:['sff','snd','swf','zip'],text:['def','cmd','cns','air','st','txt']};
-  const baseLabels={dashboard:'Dashboard',project:'Project',swf:'SWF Extract',sprite:'Sprite Edit',sound:'Sound Edit',mugen:'MUGEN Builder',inspect:'SFF / SND Inspector',text:'Text Editor',export:'Export'};
-  function computeRouteStats(){
-    const stats={project:0,sprite:0,sound:0,swf:0,inspect:0,text:0};
-    (state.files||[]).forEach(f=>{const e=(f.ext||'').toLowerCase(); Object.keys(routeMap).forEach(k=>{if(routeMap[k].includes(e)) stats[k]++;});});
-    return stats;
-  }
-  function refreshTabBadges(){
-    const s=computeRouteStats();
-    Object.entries(baseLabels).forEach(([k,label])=>{const btn=document.querySelector('.tab[data-tab="'+k+'"]'); if(!btn) return; let n=0; if(k==='project')n=s.project; else if(k==='swf')n=s.swf; else if(k==='sprite')n=s.sprite; else if(k==='sound')n=s.sound; else if(k==='inspect')n=s.inspect; else if(k==='text')n=s.text; btn.textContent=label+(n?(' ('+n+')'):'');});
-  }
-  function updateProjectRoutingInfo(){
-    const box=document.getElementById('projectRouteInfo'); if(!box) return;
-    const s=computeRouteStats();
-    box.innerHTML='Project routing: <b>'+s.sprite+' sprite</b> ke Sprite Edit, <b>'+s.sound+' sound</b> ke Sound Edit, <b>'+s.text+' text/project file</b> ke Project & Text Editor, <b>'+s.inspect+' inspectable file</b> ke Inspector. Export di luar tab menyimpan semuanya sebagai satu project.';
-    refreshTabBadges();
-  }
-  const originalAddFiles=addFiles;
-  addFiles=async function(list){await originalAddFiles(list); updateProjectRoutingInfo();};
-  const saveProjectBtn=document.getElementById('btnSaveProject'); if(saveProjectBtn) saveProjectBtn.addEventListener('click',()=>document.getElementById('btnExportAll').click());
-  updateProjectRoutingInfo();
-})();
-</script>
-
-
-<script>
-(function(){
-  function applyViewportMode(){
-    document.body.classList.toggle('is-mobile', window.innerWidth < 981);
-    document.body.classList.toggle('is-desktop', window.innerWidth >= 981);
-  }
-  applyViewportMode();
-  window.addEventListener('resize', applyViewportMode);
+  function updateParseStatus(msg){const el=document.getElementById('projectRouteInfo')||document.getElementById('projectRoutingList');if(el)el.innerHTML='<span class="parse-pill">'+msg+'</span>'}
+  async function parseAll(){if(parsing)return;parsing=true;try{for(const f of sffFiles())await parseSff(f);for(const f of sndFiles())parseSnd(f)}finally{parsing=false}renderOutputs();renderTextSelect();updatePngPreview();renderSoundList();updateSummary();refreshAll()}
+  function frameLabel(e){if(!e)return '< No frame loaded >';const m=e.meta||{};return m.kind==='sffFrame'?`< ${m.group},${m.image} | ${baseName(e.name)} >`:`< ${baseName(e.name)} >`}
+  function soundLabel(e){if(!e)return '< No sound loaded >';const m=e.meta||{};return m.kind==='sndSound'?`< ${m.group},${m.sample} | ${baseName(e.name)} >`:`< ${baseName(e.name)} >`}
+  function renderNav(){const fs=frames(),ss=sounds();if(frameIndex>=fs.length)frameIndex=Math.max(0,fs.length-1);if(soundIndex>=ss.length)soundIndex=Math.max(0,ss.length-1);const f=fs[frameIndex],s=ss[soundIndex];const fn=document.getElementById('spriteFrameName'),fc=document.getElementById('spriteFrameCount'),sn=document.getElementById('soundFrameName'),sc=document.getElementById('soundFrameCount');if(fn)fn.textContent=frameLabel(f);if(fc)fc.textContent=fs.length?`${frameIndex+1} / ${fs.length} frame`:'0 frame';if(sn)sn.textContent=soundLabel(s);if(sc)sc.textContent=ss.length?`${soundIndex+1} / ${ss.length} sound`:'0 sound'}
+  function renderRoutes(){const fs=frames(),ss=sounds(),tx=texts();const rs=document.getElementById('routeSpriteInfo'),ro=document.getElementById('routeSoundInfo'),rt=document.getElementById('routeTextInfo'),rp=document.getElementById('routeProjectInfo');if(rs)rs.textContent=`Sprite: ${fs.length} frame dari isi SFF/PNG`;if(ro)ro.textContent=`Sound: ${ss.length} sound dari isi SND/audio`;if(rt)rt.textContent=`Text: ${tx.length} DEF/AIR/CNS/CMD`;if(rp)rp.textContent=`Source: ${sffFiles().length} SFF, ${sndFiles().length} SND, ${(state.files||[]).length} total file`;const ts=document.querySelector('.tab[data-tab="sprite"]');if(ts)ts.textContent=`Sprite Edit (${fs.length})`;const ta=document.querySelector('.tab[data-tab="sound"]');if(ta)ta.textContent=`Sound Edit (${ss.length})`;const tp=document.querySelector('.tab[data-tab="project"]');if(tp)tp.textContent=`Project (${tx.length})`}
+  function refreshAll(){renderNav();renderRoutes()}
+  function dlOne(e,fallback){if(!e){alert('Belum ada isi yang terbaca. Tunggu proses parse SFF/SND selesai.');return}const blob=new Blob([e.data],{type:mimeFor(e.name||fallback)});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=baseName(e.name||fallback);document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+  function dlAll(list,name){if(!list.length){alert('Belum ada isi yang terbaca.');return}exportEntries(list.map(e=>({path:baseName(e.name),data:e.data,type:mimeFor(e.name)})),name)}
+  function bind(){['projectInput','swfInput','spriteInput','sffInput','soundInput','inspectInput','textInput'].forEach(id=>{const el=document.getElementById(id);if(el&&!el._v11){el._v11=true;el.addEventListener('change',e=>addFiles(e.target.files))}});const ps=document.getElementById('btnPrevSprite'),ns=document.getElementById('btnNextSprite'),ds=document.getElementById('btnDownloadSpriteSingle'),as=document.getElementById('btnDownloadSpriteAll');if(ps)ps.onclick=()=>{const a=frames();if(a.length){frameIndex=(frameIndex-1+a.length)%a.length;renderNav()}};if(ns)ns.onclick=()=>{const a=frames();if(a.length){frameIndex=(frameIndex+1)%a.length;renderNav()}};if(ds)ds.onclick=()=>dlOne(frames()[frameIndex],'frame.png');if(as)as.onclick=()=>dlAll(frames(),'all_frames.zip');const pa=document.getElementById('btnPrevSound'),na=document.getElementById('btnNextSound'),da=document.getElementById('btnDownloadSoundSingle'),aa=document.getElementById('btnDownloadSoundAll');if(pa)pa.onclick=()=>{const a=sounds();if(a.length){soundIndex=(soundIndex-1+a.length)%a.length;renderNav()}};if(na)na.onclick=()=>{const a=sounds();if(a.length){soundIndex=(soundIndex+1)%a.length;renderNav()}};if(da)da.onclick=()=>dlOne(sounds()[soundIndex],'sound.wav');if(aa)aa.onclick=()=>dlAll(sounds(),'all_sounds.zip')}
+  const oldAddFiles=addFiles;addFiles=async function(list){await oldAddFiles(list);await parseAll()};
+  bind();refreshAll();parseAll();
 })();
 </script>
 
