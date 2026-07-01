@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Naruto MUGEN Fighter Factory Converter</title>
+<style>
+:root{
+  --bg:#08060b;
+  --bg2:#130b0a;
+  --bg3:#171015;
+  --panel:rgba(20,20,28,.90);
+  --panel2:rgba(33,26,24,.92);
+  --panel3:rgba(17,15,22,.95);
+  --glass:rgba(255,255,255,.06);
+  --line:rgba(255,176,66,.18);
+  --line-strong:rgba(255,205,95,.35);
+  --text:#fff7ef;
+  --muted:#d2c1b5;
+  --accent:#ff8d18;
+  --accent2:#ffd54a;
+  --red:#ff4d4f;
+  --purple:#8f5bff;
+  --cyan:#64dfff;
+  --good:#2ed573;
+  --warn:#ffca3a;
+  --shadow:0 18px 60px rgba(0,0,0,.38);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  font:14px/1.48 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(255,141,24,.22),transparent 26%),
+    radial-gradient(circle at 100% 0%,rgba(143,91,255,.18),transparent 24%),
+    radial-gradient(circle at 50% 120%,rgba(255,77,79,.12),transparent 34%),
+    linear-gradient(140deg,var(--bg),var(--bg2) 48%,var(--bg3));
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.038) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.038) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.72),transparent 90%);
+}
+button,input,select,textarea{font:inherit}
+button{
+  cursor:pointer;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+  transition:.18s transform,.18s border-color,.18s box-shadow,.18s background;
+}
+button:hover{transform:translateY(-1px);border-color:rgba(255,213,74,.7);box-shadow:0 0 0 3px rgba(255,141,24,.14)}
+button.primary{background:linear-gradient(135deg,#ff8d18,#ffd54a);color:#241202;border-color:#ffd54a;font-weight:800}
+button.good{background:linear-gradient(135deg,#0f6333,#2ed573);color:#effff6;border-color:#6af0a3;font-weight:700}
+button.warn{background:linear-gradient(135deg,#704008,#ffca3a);color:#261300;border-color:#ffd86c;font-weight:700}
+button.bad{background:linear-gradient(135deg,#6a1818,#ff4d4f);color:white;border-color:#ff8c8d;font-weight:700}
+button.ghost{background:rgba(255,255,255,.035)}
+input,select,textarea{
+  width:auto;
+  color:var(--text);
+  background:rgba(0,0,0,.34);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:9px 11px;
+}
+textarea{width:100%; min-height:350px; resize:vertical; background:rgba(0,0,0,.46)}
+.wrap{max-width:1520px; margin:0 auto; padding:20px}
+.hero{
+  position:relative; overflow:hidden; border-radius:30px; padding:20px;
+  border:1px solid rgba(255,170,72,.23);
+  background:
+    radial-gradient(circle at 25% 0%,rgba(255,212,74,.12),transparent 28%),
+    radial-gradient(circle at 100% 20%,rgba(143,91,255,.13),transparent 24%),
+    linear-gradient(135deg,rgba(255,141,24,.15),rgba(255,77,79,.06) 35%,rgba(0,0,0,.30));
+  box-shadow:var(--shadow);
+}
+.hero::after{
+  content:""; position:absolute; right:-85px; top:-100px; width:330px; height:330px; border-radius:50%;
+  border:28px solid rgba(255,141,24,.08); box-shadow:inset 0 0 0 14px rgba(255,213,74,.06);
+}
+.hero-top{display:flex; gap:18px; justify-content:space-between; align-items:flex-start; position:relative; z-index:1}
+.brand{display:flex; gap:16px; align-items:flex-start}
+.logo-box{width:88px; min-width:88px; height:88px; border-radius:24px; display:grid; place-items:center; box-shadow:0 14px 40px rgba(255,141,24,.24), inset 0 0 0 4px rgba(0,0,0,.4); border:2px solid rgba(255,213,74,.7); background:radial-gradient(circle at 35% 28%,#fff6b3 0 9%,#ffd54a 11% 23%,#ff8d18 25% 58%,#4b1508 60%)}
+.logo-box svg{width:70px; height:70px; filter:drop-shadow(0 3px 0 rgba(0,0,0,.55))}
+.kicker{font-size:12px; letter-spacing:.34em; text-transform:uppercase; color:var(--accent2); font-weight:900}
+.hero h1{margin:4px 0 8px; line-height:.95; text-transform:uppercase; font-size:clamp(28px,4vw,50px); color:#ffd54a; text-shadow:3px 3px 0 #270d00,0 0 24px rgba(255,141,24,.3)}
+.hero h1 .outline{color:#fff6ed; -webkit-text-stroke:1px #1b0d05; text-shadow:3px 3px 0 #ff6b00,6px 6px 0 rgba(0,0,0,.34)}
+.hero p{margin:0; max-width:800px; color:var(--muted)}
+.tool-badges{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.badge{display:inline-flex; align-items:center; gap:6px; border-radius:999px; border:1px solid rgba(255,213,74,.25); background:rgba(0,0,0,.26); color:#ffeab3; padding:6px 10px; font-size:11px; font-weight:800; letter-spacing:.04em}
+.hero-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+.avatars{display:grid; grid-template-columns:repeat(2, minmax(170px,1fr)); gap:12px; margin-top:16px; position:relative; z-index:1}
+.avatar-card{position:relative; padding:14px; min-height:145px; border-radius:22px; border:1px solid rgba(255,255,255,.08); overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));}
+.avatar-card::before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.12),transparent 30%)}
+.avatar-card.kyubi{box-shadow:inset 0 0 0 1px rgba(255,170,72,.08), 0 12px 30px rgba(255,141,24,.12)}
+.avatar-card.tobi{box-shadow:inset 0 0 0 1px rgba(143,91,255,.11), 0 12px 30px rgba(143,91,255,.10)}
+.avatar-head{display:flex; align-items:center; gap:12px; position:relative; z-index:1}
+.avatar-illu{width:68px; height:68px; border-radius:18px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.28)}
+.avatar-illu svg{width:56px;height:56px}
+.avatar-title{font-size:18px; font-weight:900; letter-spacing:.04em}
+.avatar-sub{font-size:12px; color:var(--muted)}
+.avatar-meta{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; position:relative; z-index:1}
+.mini-pill{padding:4px 8px; font-size:11px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.26)}
+.layout{display:grid; grid-template-columns:340px 1fr; gap:16px; margin-top:16px}
+.sidebar,.content-panel,.panel{
+  background:var(--panel); border:1px solid rgba(255,170,72,.18); border-radius:24px; box-shadow:var(--shadow); backdrop-filter:blur(10px);
+}
+.sidebar{padding:16px; position:sticky; top:16px; align-self:start}
+.side-section+.side-section{margin-top:16px}
+.section-title{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
+.section-title h2,.panel h2{font-size:18px; margin:0; color:#fff0c0; text-transform:uppercase; letter-spacing:.05em}
+.panel{padding:16px}
+.panel h3{margin:16px 0 8px; font-size:14px; color:var(--accent2); text-transform:uppercase; letter-spacing:.06em}
+.side-card{border-radius:18px; padding:12px; border:1px solid rgba(255,255,255,.07); background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.16))}
+.dash-grid{display:grid; grid-template-columns:repeat(4,minmax(160px,1fr)); gap:10px; margin-bottom:14px}
+.stat-card{padding:14px; border-radius:18px; border:1px solid rgba(255,170,72,.15); background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.16))}
+.stat-card b{display:block; font-size:22px; color:#fff2c7}
+.stat-card span{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+.quick-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px}
+.quick-card{padding:14px; border-radius:18px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.18))}
+.quick-card b{display:block; margin-bottom:6px; color:#ffe69d}
+.drop{border:2px dashed rgba(255,213,74,.35); border-radius:20px; padding:18px; text-align:center; background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));}
+.drop.drag{border-color:#ffd54a; background:rgba(255,141,24,.12)}
+.file-list,.output-list,.sound-list{max-height:300px; overflow:auto}
+.file-item,.sound-item{padding:10px; border:1px solid transparent; border-bottom-color:rgba(255,170,72,.12); border-radius:12px; display:flex; justify-content:space-between; gap:10px}
+.file-item:hover,.sound-item:hover{background:rgba(255,141,24,.08)}
+.file-item.active{background:rgba(100,223,255,.10); border-color:rgba(100,223,255,.18)}
+.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.small{font-size:12px; color:var(--muted)}
+.status{padding:12px; border-radius:16px; border:1px solid rgba(255,170,72,.15); background:rgba(0,0,0,.34); white-space:pre-wrap; max-height:240px; overflow:auto}
+.notice{padding:11px 12px; border-radius:14px; border:1px solid rgba(255,202,58,.24); background:rgba(255,141,24,.08); color:#ffe7a9}
+.success{padding:11px 12px; border-radius:14px; border:1px solid rgba(46,213,115,.25); background:rgba(46,213,115,.09); color:#d5ffe4}
+.tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; padding:8px; border-radius:18px; border:1px solid rgba(255,170,72,.18); background:rgba(0,0,0,.22)}
+.tab{font-weight:800; color:#f5d9c1; background:rgba(255,255,255,.05)}
+.tab.active{background:linear-gradient(135deg,#ff8d18,#ffd54a); color:#241202; border-color:#ffd54a; box-shadow:0 10px 28px rgba(255,141,24,.20)}
+.row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:8px 0}
+.row.stretch>*{flex:1}
+.split{display:grid; grid-template-columns:1.1fr .9fr; gap:14px}
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px}
+.card{padding:10px; border-radius:16px; border:1px solid rgba(255,170,72,.14); background:rgba(0,0,0,.24)}
+.thumb{height:115px; border-radius:12px; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(255,170,72,.16); background:linear-gradient(45deg,#09070b,#1a1210)}
+.thumb img{max-width:100%; max-height:100%}
+.table-wrap{overflow:auto; border-radius:16px; border:1px solid rgba(255,170,72,.12)}
+.table{width:100%; border-collapse:collapse; background:rgba(0,0,0,.16)}
+.table th,.table td{padding:9px; border-bottom:1px solid rgba(255,170,72,.11); text-align:left; vertical-align:top}
+.table th{background:rgba(255,141,24,.07); color:#ffd54a; position:sticky; top:0}
+.table input{width:86px}
+.table input.name{width:180px}
+.progress{height:10px; border-radius:999px; overflow:hidden; border:1px solid rgba(255,170,72,.18); background:rgba(0,0,0,.36)}
+.bar{height:100%; width:0; background:linear-gradient(90deg,#ff8d18,#ffd54a)}
+.output-list .file-item{align-items:center}
+audio{width:100%}
+.editor-toolbar{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px}
+.project-grid{display:grid; grid-template-columns:repeat(2,minmax(240px,1fr)); gap:12px}
+.field{display:flex; flex-direction:column; gap:5px}
+.field label{font-size:12px; color:#dbc8ba; font-weight:700; text-transform:uppercase; letter-spacing:.05em}
+.kv{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+.kv .side-card{min-height:100px}
+.sprite-focus{display:grid; grid-template-columns:220px 1fr; gap:12px}
+.focus-preview{padding:10px; border-radius:18px; border:1px solid rgba(255,170,72,.15); background:rgba(0,0,0,.24)}
+.focus-preview .thumb{height:200px}
+.logline{padding:3px 0; border-bottom:1px solid rgba(255,170,72,.09)}
+.ok{color:#95ffbc}.err{color:#ff8d8e}.warnc{color:#ffd87e}
+.hide{display:none!important}
+.footer-note{margin-top:8px; font-size:12px; color:var(--muted)}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.sidebar{position:static}.split,.sprite-focus{grid-template-columns:1fr}.dash-grid{grid-template-columns:repeat(2,1fr)}.project-grid{grid-template-columns:1fr}.avatars{grid-template-columns:1fr}.hero-top{display:block}.hero-actions{justify-content:flex-start; margin-top:12px}}
+@media(max-width:640px){.wrap{padding:12px}.dash-grid{grid-template-columns:1fr}.logo-box{width:72px;height:72px;min-width:72px}.hero h1{font-size:30px}.brand{align-items:flex-start}}
+
+/* --- Fighter Factory inspired desktop overhaul --- */
+body{
+  background:#494949 !important;
+  color:#232323;
+}
+.wrap{max-width:1220px !important; padding:12px !important}
+.hero{
+  border-radius:8px 8px 0 0 !important;
+  background:linear-gradient(180deg,#d9e0eb,#eef2f7 18%,#e5e9f0 19%,#eff2f6) !important;
+  border:1px solid #99a4b2 !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.20) !important;
+  padding:0 !important;
+}
+.hero::after,.hero .kicker,.hero p,.hero .tool-badges{display:none !important}
+.hero-top{
+  padding:6px 10px !important;
+  min-height:auto !important;
+  background:linear-gradient(180deg,#bfd7f2,#dce7f5 45%,#edf3fb);
+  border-bottom:1px solid #bcc8d6;
+  align-items:center !important;
+}
+.brand{align-items:center !important}
+.logo-box{
+  width:32px !important; height:32px !important; min-width:32px !important;
+  border-radius:8px !important; border:1px solid #c68a16 !important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 2px 5px rgba(0,0,0,.15) !important;
+}
+.logo-box svg{width:26px !important; height:26px !important}
+.hero h1{
+  margin:0 !important; font-size:18px !important; color:#263142 !important;
+  text-shadow:none !important; -webkit-text-stroke:0 !important; text-transform:none !important;
+}
+.hero h1 .outline{color:#1e2a3b !important; text-shadow:none !important; -webkit-text-stroke:0 !important}
+.hero-actions button{padding:6px 10px !important; border-radius:8px !important; font-size:12px !important}
+.ff-menubar,.ff-toolbar,.ff-toolbar-sub{
+  display:flex; align-items:center; gap:2px; padding:4px 8px; background:#f6f7fa; border-top:1px solid #f9fbff; border-bottom:1px solid #c8ced6;
+}
+.ff-menubar span{
+  padding:2px 8px; font-size:12px; color:#1f2a39; border-radius:4px; cursor:default;
+}
+.ff-menubar span:hover{background:#e4ebf5}
+.ff-toolbar{background:linear-gradient(180deg,#eef2f8,#e4e8ef)}
+.ff-toolbar-sub{background:#f4f6f8}
+.ff-toolbtn{
+  width:30px; height:28px; padding:0 !important; display:grid; place-items:center; border-radius:6px !important; font-size:15px;
+  background:linear-gradient(180deg,#ffffff,#eef2f7) !important; color:#223 !important; border:1px solid #b9c4d2 !important;
+}
+.ff-toolbtn.small{width:26px; height:24px; font-size:13px}
+.ff-toolbtn:hover{background:linear-gradient(180deg,#fff7e4,#ffe2a9) !important; border-color:#d8a243 !important}
+.ff-spacer{flex:1}
+.ff-chip{font-size:11px; padding:4px 8px; border-radius:999px; border:1px solid #c5cfda; background:#fff; color:#304055; font-weight:700}
+.kyubi-chip{background:linear-gradient(180deg,#fff5dc,#ffe0a1)}
+.tobi-chip{background:linear-gradient(180deg,#f2ebff,#ddd1ff)}
+.avatars{
+  display:flex !important; gap:8px !important; padding:6px 8px !important; margin:0 !important; background:#eef1f4; border-top:1px solid #f9fbff; border-bottom:1px solid #c8ced6;
+}
+.avatar-card{
+  min-height:auto !important; padding:8px 10px !important; border-radius:8px !important; background:#ffffff !important; border:1px solid #c6d0da !important; box-shadow:none !important;
+}
+.avatar-card::before,.avatar-meta{display:none !important}
+.avatar-head{gap:10px !important}
+.avatar-illu{width:36px !important; height:36px !important; border-radius:10px !important; background:#f7f9fc !important}
+.avatar-illu svg{width:28px !important; height:28px !important}
+.avatar-title{font-size:13px !important; color:#223146 !important}
+.avatar-sub{font-size:11px !important; color:#5b6672 !important}
+.layout{
+  margin-top:0 !important; gap:0 !important; grid-template-columns:210px 1fr !important; background:#d8dde4; border:1px solid #99a4b2; border-top:0; border-radius:0 0 8px 8px; overflow:hidden;
+}
+.sidebar{
+  position:static !important; top:auto !important; align-self:stretch !important; border-radius:0 !important; box-shadow:none !important; border:0 !important; border-right:1px solid #b9c1cb !important;
+  background:linear-gradient(180deg,#dfe4cf,#dfe4cf 60%,#e5ead5) !important; padding:10px !important;
+}
+.section-title h2,.panel h2{color:#223146 !important; font-size:14px !important; letter-spacing:.03em !important}
+.section-title{margin-bottom:8px !important}
+.side-card,.stat-card,.quick-card,.notice,.success{
+  background:#f8fbff !important; color:#334253 !important; border:1px solid #c9d2db !important; box-shadow:none !important;
+}
+.drop{
+  background:#fcfdff !important; border-color:#b2bfd0 !important; border-style:solid !important; border-width:1px !important; border-radius:8px !important; color:#233;
+}
+.drop b{font-size:14px; color:#1f2a39}
+.small{color:#56616e !important}
+.file-item,.sound-item{
+  background:rgba(255,255,255,.55); border:1px solid transparent; border-bottom-color:#cfd4da !important; color:#243243;
+}
+.file-item:hover,.sound-item:hover{background:#eff5ff !important}
+.file-item.active{background:#dce9ff !important; border-color:#b4c9f1 !important}
+main{background:#f2f3f5}
+.dash-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:8px !important; margin:10px !important 10px 0 !important;
+}
+.stat-card{padding:10px 12px !important; border-radius:8px !important; background:linear-gradient(180deg,#fff,#f1f5fb) !important}
+.stat-card b{font-size:16px !important; color:#1f2c3c !important}
+.tabs{
+  margin:10px 10px 0 !important; padding:6px 6px 0 !important; gap:4px !important; border-radius:8px 8px 0 0 !important; background:#eceff3 !important; border:1px solid #c7cdd5 !important; border-bottom:0 !important;
+}
+.tab{
+  padding:8px 10px !important; border-radius:8px 8px 0 0 !important; background:linear-gradient(180deg,#ffffff,#eceff4) !important; color:#2e3a4a !important; border:1px solid #c7cdd5 !important; border-bottom:0 !important; font-size:12px !important;
+}
+.tab.active{
+  background:linear-gradient(180deg,#fff4da,#ffe1a5) !important; color:#352200 !important; border-color:#d7ae5e !important; box-shadow:none !important;
+}
+.panel{
+  border-radius:0 0 8px 8px !important; box-shadow:none !important; border:1px solid #c7cdd5 !important; background-color:#fff !important;
+  background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px) !important;
+  background-size:24px 24px !important; background-position:-1px -1px !important;
+  margin:0 10px 10px !important; padding:12px !important; min-height:610px;
+}
+#tab-dashboard .split,#tab-mugen .split,#tab-sprite .sprite-focus{gap:12px !important}
+.status,textarea,.table,.table-wrap,.focus-preview,.thumb,input,select{
+  background-color:rgba(255,255,255,.88) !important; color:#222 !important; border-color:#c6ccd4 !important;
+}
+.table th{background:#eef3fa !important; color:#263142 !important}
+.thumb{background:#fff !important}
+#focusThumb img,.thumb img{image-rendering:auto}
+button{color:#223 !important; background:linear-gradient(180deg,#fff,#eef2f7) !important; border-color:#bcc8d6 !important}
+button.primary{background:linear-gradient(180deg,#ffeebd,#ffd47c) !important; color:#3a2700 !important; border-color:#d4a34e !important}
+button.good{background:linear-gradient(180deg,#dff6e8,#b8eac9) !important; color:#143d25 !important; border-color:#7fc999 !important}
+button.warn{background:linear-gradient(180deg,#fff1d4,#ffd992) !important; color:#523200 !important; border-color:#d2a048 !important}
+button.bad{background:linear-gradient(180deg,#ffe2e2,#ffb7b8) !important; color:#5a1111 !important; border-color:#dc8b8c !important}
+.ff-statusbar{
+  display:flex; flex-wrap:wrap; gap:18px; padding:6px 10px; margin:0 10px 10px; border:1px solid #c7cdd5; border-top:0; background:#eceff3; color:#3a4656; font-size:12px; border-radius:0 0 8px 8px;
+}
+.footer-note{color:#57606b !important}
+@media(max-width:1100px){
+  .layout{grid-template-columns:1fr !important}
+  .tabs,.panel,.ff-statusbar,.dash-grid{margin-left:8px !important; margin-right:8px !important}
+}
+
+
+/* --- V4 Naruto themed Fighter Factory workspace --- */
+body{
+  background:
+    radial-gradient(circle at 10% 0%,rgba(255,128,18,.26),transparent 30%),
+    radial-gradient(circle at 90% 0%,rgba(139,89,255,.18),transparent 28%),
+    linear-gradient(135deg,#130c09,#25120b 45%,#100e17 100%) !important;
+}
+.wrap{max-width:1280px !important}
+.hero{
+  background:
+    linear-gradient(180deg,rgba(33,20,13,.96),rgba(18,15,20,.96)) !important;
+  border-color:rgba(255,170,72,.35) !important;
+  color:#fff4e7 !important;
+}
+.hero-top{
+  background:
+    linear-gradient(180deg,rgba(255,139,20,.25),rgba(31,22,20,.82)) !important;
+  border-bottom:1px solid rgba(255,200,85,.28) !important;
+}
+.hero h1,.hero h1 .outline{color:#fff1c4 !important}
+.ff-menubar{
+  background:linear-gradient(180deg,#241915,#171419) !important;
+  border-bottom:1px solid rgba(255,170,72,.25) !important;
+}
+.ff-menubar span{color:#ffe7b2 !important}
+.ff-menubar span:hover{background:rgba(255,141,24,.18) !important}
+.ff-toolbar,.ff-toolbar-sub{
+  background:linear-gradient(180deg,#2a211d,#1b171b) !important;
+  border-bottom:1px solid rgba(255,170,72,.20) !important;
+}
+.ff-toolbtn{
+  background:linear-gradient(180deg,#fff7e6,#ffd48e) !important;
+  border-color:#b87521 !important;
+  color:#2d1700 !important;
+}
+.ff-chip{display:none !important}
+.ff-theme-scene{
+  position:relative;
+  height:112px;
+  overflow:hidden;
+  border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,170,72,.18);
+  background:
+    linear-gradient(90deg,rgba(255,113,9,.20),transparent 34%,rgba(143,91,255,.16)),
+    linear-gradient(180deg,rgba(255,160,28,.08),rgba(0,0,0,.28));
+}
+.kyubi-flame{
+  position:absolute; inset:-20px 35% -30px -10%;
+  background:
+    radial-gradient(circle at 20% 80%,rgba(255,216,72,.38),transparent 28%),
+    radial-gradient(circle at 38% 60%,rgba(255,113,9,.32),transparent 32%),
+    radial-gradient(circle at 8% 20%,rgba(255,58,35,.18),transparent 28%);
+  filter:blur(2px);
+}
+.tobi-watermark{
+  position:absolute; right:18px; top:-110px; width:300px; height:300px; opacity:.58;
+  transform:rotate(-8deg);
+}
+.kyubi-sigil{
+  position:absolute; left:18px; bottom:-12px; width:260px; opacity:.72;
+}
+.brand-footer{
+  position:absolute; right:18px; bottom:10px; z-index:2;
+  color:#ffe4a5; font-size:13px; font-weight:800; text-shadow:0 2px 8px rgba(0,0,0,.8);
+}
+.brand-footer a{color:#fff4c7; text-decoration:none; border-bottom:1px solid rgba(255,244,199,.55)}
+.layout{
+  background:rgba(17,14,19,.96) !important;
+  border-color:rgba(255,170,72,.32) !important;
+}
+.sidebar{
+  background:
+    linear-gradient(180deg,rgba(42,28,20,.96),rgba(19,17,23,.96)) !important;
+  border-right-color:rgba(255,170,72,.22) !important;
+}
+main{background:rgba(17,14,19,.96) !important}
+.section-title h2,.panel h2{color:#ffe4a5 !important}
+.panel{
+  background:linear-gradient(180deg,rgba(35,29,30,.95),rgba(23,20,26,.95)) !important;
+  background-image:none !important;
+  border-color:rgba(255,170,72,.23) !important;
+  color:#fff2e1 !important;
+}
+.tabs{
+  background:rgba(14,12,16,.85) !important;
+  border-color:rgba(255,170,72,.24) !important;
+}
+.tab{
+  background:linear-gradient(180deg,#2c2527,#1c181e) !important;
+  color:#ffdca2 !important;
+  border-color:rgba(255,170,72,.22) !important;
+}
+.tab.active{
+  background:linear-gradient(180deg,#ffcd72,#ff8d18) !important;
+  color:#271300 !important;
+  border-color:#ffcf79 !important;
+}
+.stat-card,.quick-card,.side-card,.notice,.success{
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035)) !important;
+  color:#ffe8c2 !important;
+  border-color:rgba(255,170,72,.18) !important;
+}
+.stat-card b,.quick-card b{color:#fff3c9 !important}
+.file-item,.sound-item{
+  background:rgba(255,255,255,.055) !important;
+  color:#ffe8c2 !important;
+  border-bottom-color:rgba(255,170,72,.16) !important;
+}
+.file-item.active{background:rgba(255,141,24,.16) !important; border-color:rgba(255,210,95,.35) !important}
+input[type=file]{display:none !important}
+.upload-drop{display:flex; flex-direction:column; gap:10px; align-items:stretch}
+.upload-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  min-height:38px; padding:10px 14px; border-radius:14px;
+  background:linear-gradient(135deg,#ff8d18,#ffd54a);
+  color:#261300; border:1px solid #ffd77c; font-weight:900; cursor:pointer;
+  box-shadow:0 9px 24px rgba(255,141,24,.16), inset 0 1px 0 rgba(255,255,255,.35);
+  transition:.18s transform,.18s box-shadow,.18s filter;
+}
+.upload-btn:hover{transform:translateY(-1px); filter:saturate(1.08); box-shadow:0 0 0 3px rgba(255,141,24,.18),0 12px 28px rgba(255,141,24,.18)}
+.upload-btn span:first-child,.upload-icon{font-size:18px}
+.main-upload{width:100%}
+.mode-filebar{
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  padding:9px; margin:0 0 12px; border-radius:16px;
+  background:rgba(0,0,0,.20); border:1px solid rgba(255,170,72,.18);
+}
+.mode-filebar .upload-btn{min-height:34px; padding:8px 12px; border-radius:12px; font-size:13px}
+.drop{
+  background:rgba(0,0,0,.18) !important;
+  border:1px solid rgba(255,170,72,.25) !important;
+  color:#ffe8c2 !important;
+}
+.small{color:#d9c4aa !important}
+.dash-grid .stat-card{
+  background:linear-gradient(180deg,rgba(255,141,24,.10),rgba(255,255,255,.04)) !important;
+  border-color:rgba(255,170,72,.20) !important;
+}
+textarea{
+  background:#fbfbfb !important;
+  color:#222 !important;
+  border-color:#bfc7d0 !important;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+.table-wrap,.table{
+  background:#fbfbfb !important;
+  color:#222 !important;
+}
+.table th{background:#eef2f8 !important;color:#263142 !important}
+.table td{color:#222 !important}
+.table input{background:#fff !important;color:#222 !important}
+.thumb,#focusThumb,.pixel-canvas-shell{
+  background-color:#fff !important;
+  background-image:
+    linear-gradient(rgba(0,0,0,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.08) 1px,transparent 1px) !important;
+  background-size:16px 16px !important;
+}
+.pixel-editor-panel{
+  margin-bottom:14px; padding:10px; border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.16));
+  border:1px solid rgba(255,170,72,.20);
+}
+.pixel-toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px}
+.color-chip{
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(0,0,0,.24); border:1px solid rgba(255,170,72,.22);
+  border-radius:12px; padding:7px 10px; color:#ffe8c2; font-weight:800;
+}
+.color-chip input{width:42px;height:28px;padding:0;border-radius:8px}
+.pixel-workbench{
+  position:relative;
+  height:360px; overflow:auto;
+  border-radius:14px;
+  border:1px solid #bfc7d0;
+  background:#fff;
+}
+.pixel-canvas-shell{
+  min-width:100%; min-height:100%;
+  display:grid; place-items:start;
+  padding:28px;
+}
+#pixelCanvas{
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  background:transparent;
+  box-shadow:0 0 0 1px rgba(0,0,0,.55),0 10px 26px rgba(0,0,0,.18);
+  cursor:crosshair;
+}
+.pixel-ruler{
+  position:sticky; top:0; left:0; z-index:2; height:22px;
+  background:linear-gradient(180deg,#f2f4f8,#dfe5ee);
+  border-bottom:1px solid #bfc7d0;
+}
+.ff-statusbar{
+  background:linear-gradient(180deg,#251b18,#171419) !important;
+  color:#ffe4a5 !important;
+  border-color:rgba(255,170,72,.20) !important;
+}
+a{color:#ffd54a}
+
+
+/* --- V5 aura/footer refinement --- */
+.app-bg-aura{
+  position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;
+}
+.app-bg-aura .aura{
+  position:absolute; border-radius:50%; filter:blur(28px); opacity:.34; mix-blend-mode:screen;
+  animation:auraFloat 18s ease-in-out infinite, auraPulse 9s ease-in-out infinite;
+}
+.app-bg-aura .aura-1{width:480px;height:480px;left:-90px;top:40px;background:radial-gradient(circle,rgba(255,170,34,.48) 0%,rgba(255,94,0,.22) 38%,transparent 70%);animation-duration:16s,8s}
+.app-bg-aura .aura-2{width:380px;height:380px;right:-60px;top:110px;background:radial-gradient(circle,rgba(134,99,255,.34) 0%,rgba(95,58,220,.16) 44%,transparent 74%);animation-duration:22s,11s}
+.app-bg-aura .aura-3{width:320px;height:320px;left:26%;bottom:90px;background:radial-gradient(circle,rgba(255,218,93,.22) 0%,rgba(255,133,25,.10) 48%,transparent 78%);animation-duration:20s,10s}
+.app-bg-aura .aura-4{width:260px;height:260px;right:18%;bottom:60px;background:radial-gradient(circle,rgba(255,113,9,.18) 0%,rgba(255,56,20,.09) 44%,transparent 76%);animation-duration:26s,13s}
+.app-bg-aura .chakra-rings{
+  position:absolute; right:7%; top:12%; width:460px; height:460px; opacity:.16; filter:blur(.3px);
+  background:
+    radial-gradient(circle at center,transparent 0 34%,rgba(255,214,107,.20) 34.3% 35.2%,transparent 35.7% 44%,rgba(255,214,107,.12) 44.2% 45%,transparent 45.5% 54%,rgba(255,214,107,.09) 54.3% 55%,transparent 55.5%);
+  animation:ringDrift 28s linear infinite;
+}
+@keyframes auraFloat{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  25%{transform:translate3d(20px,-14px,0) scale(1.06)}
+  50%{transform:translate3d(-12px,10px,0) scale(.98)}
+  75%{transform:translate3d(16px,18px,0) scale(1.04)}
+  100%{transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes auraPulse{
+  0%,100%{opacity:.22}
+  50%{opacity:.42}
+}
+@keyframes ringDrift{
+  0%{transform:rotate(0deg) translateY(0)}
+  50%{transform:rotate(180deg) translateY(8px)}
+  100%{transform:rotate(360deg) translateY(0)}
+}
+.wrap,.app-footer{position:relative;z-index:1}
+.ff-theme-scene{
+  height:102px;
+  background:
+    linear-gradient(90deg,rgba(255,126,14,.10),rgba(255,126,14,.02) 38%,rgba(119,83,255,.08) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.18));
+}
+.ff-theme-scene::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 13% 75%,rgba(255,190,48,.16),transparent 20%),
+    radial-gradient(circle at 24% 44%,rgba(255,104,22,.16),transparent 24%),
+    radial-gradient(circle at 78% 28%,rgba(148,111,255,.12),transparent 26%);
+  animation:auraPulse 10s ease-in-out infinite;
+}
+.kyubi-flame{
+  inset:auto auto -8px -14px; width:46%; height:118%; filter:blur(0px); opacity:.95;
+  background:
+    radial-gradient(circle at 14% 76%,rgba(255,225,105,.20),transparent 20%),
+    radial-gradient(circle at 28% 58%,rgba(255,124,13,.28),transparent 24%),
+    radial-gradient(circle at 8% 34%,rgba(255,77,24,.16),transparent 18%),
+    linear-gradient(90deg,rgba(255,150,33,.08),transparent 65%);
+  animation:auraFloat 13s ease-in-out infinite;
+}
+.tobi-watermark{
+  right:18px; top:-82px; width:250px; height:250px; opacity:.34; transform:rotate(-10deg);
+  filter:drop-shadow(0 0 22px rgba(165,122,255,.08));
+}
+.kyubi-sigil{left:20px; bottom:-8px; width:210px; opacity:.54}
+.brand-footer{display:none !important}
+.app-footer{
+  margin:10px auto 0; max-width:1280px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px 16px; border-radius:14px;
+  background:linear-gradient(180deg,rgba(33,20,13,.86),rgba(18,15,20,.92));
+  border:1px solid rgba(255,170,72,.22); box-shadow:0 10px 24px rgba(0,0,0,.18);
+}
+.footer-copy{color:#ffe4a5;font-weight:800;letter-spacing:.03em}
+.yt-button{
+  display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:999px; text-decoration:none;
+  background:linear-gradient(180deg,#ff4f4f,#d91717); color:#fff !important; font-weight:900; border:1px solid rgba(255,255,255,.20);
+  box-shadow:0 10px 22px rgba(217,23,23,.22), inset 0 1px 0 rgba(255,255,255,.18); transition:.18s transform,.18s filter,.18s box-shadow;
+}
+.yt-button:hover{transform:translateY(-1px); filter:saturate(1.06); box-shadow:0 0 0 3px rgba(255,79,79,.18),0 12px 26px rgba(217,23,23,.28)}
+.yt-button svg{width:22px;height:22px;display:block;color:#fff;flex:0 0 auto}
+@media(max-width:720px){
+  .app-footer{flex-direction:column; align-items:stretch; text-align:center}
+  .yt-button{justify-content:center}
+}
+
+
+/* --- V6 theme switch + refined desktop/mobile --- */
+body.theme-naruto{--ff-accent:#ff8d18;--ff-accent2:#ffd54a;--ff-dark:#23130d;--ff-dark2:#161117;--ff-heroGlow:rgba(255,139,20,.25);--ff-purple:rgba(119,83,255,.08);--ff-footerGrad1:#ff4f4f;--ff-footerGrad2:#d91717;}
+body.theme-sasuke{--ff-accent:#8562ff;--ff-accent2:#ff9fd1;--ff-dark:#171321;--ff-dark2:#12101a;--ff-heroGlow:rgba(133,98,255,.24);--ff-purple:rgba(255,159,209,.10);--ff-footerGrad1:#7a61ff;--ff-footerGrad2:#ef7dbf;}
+body.theme-hinata{--ff-accent:#8d7dff;--ff-accent2:#f2d0ff;--ff-dark:#171528;--ff-dark2:#11121f;--ff-heroGlow:rgba(150,130,255,.24);--ff-purple:rgba(210,184,255,.10);--ff-footerGrad1:#8d7dff;--ff-footerGrad2:#b69dff;}
+body.theme-kakashi{--ff-accent:#96b2c8;--ff-accent2:#d9eef8;--ff-dark:#162028;--ff-dark2:#11181d;--ff-heroGlow:rgba(150,178,200,.22);--ff-purple:rgba(196,225,237,.09);--ff-footerGrad1:#6d8fa4;--ff-footerGrad2:#9fc5d5;}
+body.theme-sai{--ff-accent:#434343;--ff-accent2:#dcdcdc;--ff-dark:#191919;--ff-dark2:#101010;--ff-heroGlow:rgba(110,110,110,.18);--ff-purple:rgba(200,200,200,.08);--ff-footerGrad1:#444;--ff-footerGrad2:#777;}
+body.theme-yamato{--ff-accent:#4c8b66;--ff-accent2:#c6f1d2;--ff-dark:#15221a;--ff-dark2:#101813;--ff-heroGlow:rgba(76,139,102,.22);--ff-purple:rgba(180,231,199,.08);--ff-footerGrad1:#457a5a;--ff-footerGrad2:#6cad84;}
+body{background:radial-gradient(circle at 10% 0%,color-mix(in srgb,var(--ff-accent) 28%, transparent),transparent 30%),radial-gradient(circle at 90% 0%,var(--ff-purple),transparent 28%),linear-gradient(135deg,var(--ff-dark),color-mix(in srgb,var(--ff-dark) 70%, #2a120b) 45%,var(--ff-dark2)) !important;}
+.hero{background:linear-gradient(180deg,color-mix(in srgb,var(--ff-dark) 90%, #35200f),var(--ff-dark2)) !important;}
+.hero-top{background:linear-gradient(180deg,var(--ff-heroGlow),rgba(31,22,20,.82)) !important;}
+.hero h1{font-size:clamp(28px,3vw,42px) !important;line-height:1.02 !important;letter-spacing:-.02em !important;}
+.hero h1,.hero h1 .outline{color:#fff1c4 !important;text-shadow:0 2px 10px rgba(0,0,0,.18)!important}
+.hero-actions .primary,.upload-btn,.tab.active{background:linear-gradient(180deg,var(--ff-accent2),var(--ff-accent)) !important;border-color:color-mix(in srgb,var(--ff-accent2) 75%, white) !important;color:#261300 !important;}
+.ff-menubar{background:linear-gradient(180deg,color-mix(in srgb,var(--ff-dark) 88%, #311e11),var(--ff-dark2)) !important;}
+.ff-menubar span:hover{background:color-mix(in srgb,var(--ff-accent) 18%, transparent) !important}
+.ff-toolbar,.ff-toolbar-sub{background:linear-gradient(180deg,color-mix(in srgb,var(--ff-dark) 84%, #3b2411),color-mix(in srgb,var(--ff-dark2) 92%, #120f12)) !important;}
+.layout{border-color:color-mix(in srgb,var(--ff-accent) 32%, #5a3521) !important;}
+.sidebar{background:linear-gradient(180deg,color-mix(in srgb,var(--ff-dark) 82%, #412715),color-mix(in srgb,var(--ff-dark2) 92%, #17151f)) !important;}
+.panel,.tabs,.ff-statusbar,.drop,.mode-filebar,.pixel-editor-panel,.side-card,.stat-card,.quick-card,.notice,.success{border-color:color-mix(in srgb,var(--ff-accent) 22%, #7f5839) !important;}
+.ff-theme-scene{height:114px !important;background:linear-gradient(90deg,color-mix(in srgb,var(--ff-accent) 12%, transparent),rgba(255,126,14,.02) 38%,var(--ff-purple) 100%),linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.18)) !important;}
+.theme-sigil{position:absolute;pointer-events:none;}
+.theme-sigil-fox{left:10px;bottom:-2px;width:250px;opacity:.86;filter:drop-shadow(0 0 16px rgba(255,136,35,.12));}
+.theme-sigil-mask{right:16px;top:-84px;width:238px;height:238px;opacity:.35;transform:rotate(-9deg);filter:drop-shadow(0 0 18px rgba(131,97,255,.10));}
+.kyubi-flame{inset:auto auto -4px -10px;width:52%;height:118%;background:radial-gradient(circle at 14% 76%,rgba(255,225,105,.18),transparent 20%),radial-gradient(circle at 28% 58%,rgba(255,124,13,.22),transparent 24%),radial-gradient(circle at 8% 34%,rgba(255,77,24,.12),transparent 18%),linear-gradient(90deg,rgba(255,150,33,.08),transparent 65%) !important;}
+.app-footer{display:grid;grid-template-columns:1.1fr 2fr auto;align-items:center;gap:16px;padding:14px 18px !important;}
+.footer-left{min-width:0}.footer-copy{font-size:20px;font-weight:900}.footer-sub{margin-top:4px;color:#e8d4b4;font-size:12px;line-height:1.35}
+.footer-center{min-width:0}.theme-switch-label{color:#ffe4a5;font-weight:800;margin-bottom:6px;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.theme-switcher{display:flex;flex-wrap:wrap;gap:8px}.theme-btn{padding:8px 12px !important;border-radius:999px !important;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04)) !important;color:#ffe6bf !important;border:1px solid rgba(255,170,72,.18) !important;font-size:12px;font-weight:800}.theme-btn.active{background:linear-gradient(180deg,var(--ff-accent2),var(--ff-accent)) !important;color:#2b1400 !important;border-color:color-mix(in srgb,var(--ff-accent2) 75%, white) !important;}
+.yt-button{background:linear-gradient(180deg,var(--ff-footerGrad1),var(--ff-footerGrad2)) !important;min-width:140px;justify-content:center;padding:12px 18px !important;}
+.yt-button svg{width:24px;height:24px;display:block;flex:0 0 auto}.yt-button span{font-size:18px;font-weight:900;letter-spacing:.01em}
+.dash-grid{grid-template-columns:repeat(4,minmax(120px,1fr)) !important;}
+@media (min-width:1100px){.wrap{max-width:1460px !important}.layout{grid-template-columns:235px 1fr !important}.hero-top{padding:10px 14px !important}.ff-menubar span{font-size:13px}.panel{min-height:650px}.tabs{flex-wrap:nowrap;overflow:auto}.sidebar{min-height:980px}.ff-statusbar{margin-bottom:4px}}
+@media (max-width:820px){.hero h1{font-size:27px !important}.ff-theme-scene{height:102px !important}.theme-sigil-fox{width:205px;left:6px;bottom:4px}.theme-sigil-mask{width:190px;height:190px;top:-58px;right:2px}.app-footer{grid-template-columns:1fr;align-items:stretch;text-align:center}.theme-switcher{justify-content:center}.footer-sub{max-width:none}.yt-button{width:100%}}
+
+
+/* --- V7 mobile fit + title/background refinement --- */
+html,body{max-width:100%;overflow-x:hidden !important;}
+*{box-sizing:border-box;}
+.wrap{width:100%;max-width:1460px;margin:0 auto;padding:12px !important;overflow-x:hidden;}
+.hero,.layout,main,.sidebar,.panel,.app-footer,.tabs,.dash-grid,.kv,.project-grid,.split,.sprite-focus,.quick-grid,.mode-filebar{max-width:100%;}
+img,svg,canvas{max-width:100%;height:auto;}
+.hero-top{gap:10px !important;align-items:center !important;}
+.hero h1{font-size:clamp(34px,5.6vw,54px) !important;font-weight:1000 !important;letter-spacing:-.03em !important;line-height:.96 !important;text-transform:none !important;font-style:italic;transform:skewX(-5deg);text-shadow:0 3px 0 rgba(116,48,6,.7),0 6px 20px rgba(0,0,0,.25) !important;}
+.hero h1 .outline{display:inline-block;transform:skewX(-4deg);}
+.kicker{font-size:11px !important;letter-spacing:.26em !important;color:#ffd97c !important;}
+.ff-theme-scene{position:relative;height:122px !important;overflow:hidden;background:linear-gradient(90deg,rgba(255,126,14,.10),rgba(255,126,14,.02) 38%,var(--ff-purple) 100%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.18)) !important;}
+.scene-aura{position:absolute;inset:auto;filter:blur(22px);pointer-events:none;opacity:.5;animation:auraFloat 13s ease-in-out infinite;}
+.scene-aura.aura-left{left:-30px;bottom:-22px;width:220px;height:120px;background:radial-gradient(circle,rgba(255,188,46,.35),rgba(255,108,18,.18) 50%,transparent 72%);}
+.scene-aura.aura-right{right:-18px;top:14px;width:160px;height:160px;background:radial-gradient(circle,rgba(121,92,255,.18),rgba(255,130,18,.10) 55%,transparent 74%);animation-duration:17s;}
+.theme-sigil-fox{left:14px;bottom:0;width:260px;opacity:.9;}
+.theme-sigil-mask{right:18px;top:-58px;width:210px;height:210px;opacity:.43;transform:rotate(-9deg);}
+.upload-btn{width:100%;max-width:100%;white-space:normal;text-align:center;justify-content:center;}
+.main-upload{display:flex;width:100%;}
+.drop{padding:14px !important;}
+.drop .small{display:block;word-break:break-word;}
+.kv{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+.row.stretch>*{min-width:0;}
+.row{max-width:100%;}
+.row>button,.row>input,.row>select{max-width:100%;}
+.dash-grid{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
+.quick-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr)) !important;}
+.file-item,.sound-item,.stat-card,.side-card,.quick-card{min-width:0;overflow:hidden;}
+.file-item .mono,.sound-item .mono{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tabs{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;}
+.app-footer{max-width:1460px;width:calc(100% - 24px);margin:10px auto 0 !important;}
+.yt-button{min-width:0 !important;white-space:nowrap;}
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr !important;}
+  .sidebar{min-height:auto !important;border-right:0 !important;border-bottom:1px solid rgba(255,170,72,.18) !important;}
+  .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;margin:10px !important;}
+  .kv{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+  .project-grid,.split,.sprite-focus{grid-template-columns:1fr !important;}
+  .hero-top{display:flex !important;flex-direction:column;align-items:flex-start !important;}
+  .brand{width:100%;}
+  .hero-actions{width:100%;justify-content:flex-start !important;}
+  .hero-actions button{flex:0 1 auto;}
+  .panel{min-height:auto !important;}
+}
+@media (max-width:720px){
+  .wrap{padding:0 !important;}
+  .hero{border-radius:0 !important;}
+  .logo-box{width:42px !important;height:42px !important;min-width:42px !important;}
+  .logo-box svg{width:32px !important;height:32px !important;}
+  .hero-top{padding:10px 12px !important;}
+  .hero h1{font-size:clamp(30px,7.6vw,44px) !important;line-height:1 !important;}
+  .ff-menubar,.ff-toolbar,.ff-toolbar-sub{padding-left:6px !important;padding-right:6px !important;}
+  .ff-menubar{overflow-x:auto;white-space:nowrap;scrollbar-width:none;}
+  .ff-menubar::-webkit-scrollbar{display:none;}
+  .ff-menubar span{flex:0 0 auto;}
+  .ff-toolbar,.ff-toolbar-sub{overflow-x:auto;scrollbar-width:none;}
+  .ff-toolbar::-webkit-scrollbar,.ff-toolbar-sub::-webkit-scrollbar{display:none;}
+  .layout{border-radius:0 !important;border-left:0 !important;border-right:0 !important;}
+  .sidebar{padding:12px !important;}
+  .mode-filebar{padding:8px !important;}
+  .drop{padding:12px !important;}
+  .upload-btn{font-size:14px !important;padding:10px 12px !important;border-radius:14px !important;}
+  .row.stretch{display:grid !important;grid-template-columns:1fr 1fr;gap:10px;}
+  .row.stretch>button{width:100%;min-width:0;}
+  .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important;}
+  .stat-card{padding:10px !important;}
+  .kv{grid-template-columns:1fr 1fr !important;gap:10px !important;}
+  .quick-grid{grid-template-columns:1fr !important;}
+  .panel{margin:0 8px 8px !important;padding:10px !important;}
+  .tabs{margin:8px 8px 0 !important;}
+  .ff-statusbar{margin:0 8px 8px !important;padding:10px !important;gap:10px !important;}
+  .ff-theme-scene{height:112px !important;}
+  .theme-sigil-fox{width:220px;left:4px;bottom:0;opacity:.92;}
+  .theme-sigil-mask{width:165px;height:165px;top:-30px;right:-4px;opacity:.35;}
+  .app-footer{width:calc(100% - 16px);grid-template-columns:1fr !important;padding:12px !important;margin-top:8px !important;}
+  .theme-switcher{justify-content:center;}
+  .theme-btn{flex:1 1 calc(50% - 8px);min-width:130px;}
+}
+@media (max-width:430px){
+  .hero h1{font-size:clamp(28px,8.2vw,38px) !important;}
+  .row.stretch{grid-template-columns:1fr 1fr;}
+  .row.stretch>button{padding:10px 8px !important;font-size:13px;}
+  .kv{grid-template-columns:1fr !important;}
+  .dash-grid{grid-template-columns:1fr 1fr !important;}
+  .theme-btn{flex:1 1 100%;min-width:0;}
+  .theme-sigil-fox{width:195px;left:-2px;bottom:6px;}
+  .theme-sigil-mask{width:145px;height:145px;top:-18px;right:-12px;}
+}
+
+</style>
+</head>
+<body class="theme-naruto">
+<div class="app-bg-aura" aria-hidden="true">
+  <span class="aura aura-1"></span>
+  <span class="aura aura-2"></span>
+  <span class="aura aura-3"></span>
+  <span class="aura aura-4"></span>
+  <span class="chakra-rings"></span>
+</div>
+<div class="wrap">
+  <section class="hero">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="logo-box" aria-label="Naruto themed logo">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M18 52c9-25 38-34 58-16 12 11 11 30-2 40-15 12-38 7-43-9-4-12 6-25 20-24 9 1 17 8 16 17-1 8-9 13-17 10-5-2-8-7-6-12 2-4 7-6 11-3" fill="none" stroke="#1a0b02" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18 52c9-25 38-34 58-16 12 11 11 30-2 40-15 12-38 7-43-9-4-12 6-25 20-24 9 1 17 8 16 17-1 8-9 13-17 10-5-2-8-7-6-12 2-4 7-6 11-3" fill="none" stroke="#fff3bf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 25h27l5-8 8 8h36l-11 12H22z" fill="#1a0b02" opacity=".9"/>
+            <path d="M19 27h63l-7 7H25z" fill="#f5f5f5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="kicker">MUGEN Character Tool Suite</div>
+          <h1><span class="outline">Naruto</span> Fighter Factory</h1>
+          <p>Tampilan dibuat lebih rapih dan lebih mirip tool workspace: ada banyak tab khusus edit sprite, edit sound, animation, project config, inspector, SWF extract, builder, dan export. Tema Kyubi &amp; Tobi juga ditambahkan agar lebih hidup.</p>
+          <div class="tool-badges">
+            <span class="badge">SWF Extract</span>
+            <span class="badge">Sprite Edit</span>
+            <span class="badge">Sound Edit</span>
+            <span class="badge">AIR / CNS / CMD / DEF</span>
+            <span class="badge">SFF / SND Inspector</span>
+            <span class="badge">ZIP Export</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button id="btnExportAll" class="primary">Export ZIP</button>
+        <button id="btnManifest" class="ghost">Manifest</button>
+        <button id="btnClear" class="bad">Clear</button>
+      </div>
+    </div>
+
+    <div class="ff-menubar">
+      <span>Project</span><span>Edit</span><span>View</span><span>Definitions</span><span>Sprites</span><span>Palettes</span><span>Animations</span><span>Commands</span><span>States</span><span>Sounds</span><span>Tools</span><span>Help</span>
+    </div>
+    <div class="ff-toolbar">
+      <button class="ff-toolbtn" title="New">✚</button>
+      <button class="ff-toolbtn" title="Open">📂</button>
+      <button class="ff-toolbtn" title="Save">💾</button>
+      <button class="ff-toolbtn" title="Import Sprite">🖼️</button>
+      <button class="ff-toolbtn" title="Import Audio">🎵</button>
+      <button class="ff-toolbtn" title="Animation">🎞️</button>
+      <button class="ff-toolbtn" title="State">🕹️</button>
+      <button class="ff-toolbtn" title="Palette">🎨</button>
+      <button class="ff-toolbtn" title="Tools">🛠️</button>
+      <button class="ff-toolbtn" title="Inspect">🔎</button>
+      <span class="ff-spacer"></span>
+      <span class="ff-chip kyubi-chip">Kyubi Theme</span>
+      <span class="ff-chip tobi-chip">Tobi Theme</span>
+    </div>
+    <div class="ff-toolbar ff-toolbar-sub">
+      <button class="ff-toolbtn small" title="Previous">↶</button>
+      <button class="ff-toolbtn small" title="Next">↷</button>
+      <button class="ff-toolbtn small" title="Add">＋</button>
+      <button class="ff-toolbtn small" title="Remove">－</button>
+      <button class="ff-toolbtn small" title="Up">↑</button>
+      <button class="ff-toolbtn small" title="Down">↓</button>
+      <button class="ff-toolbtn small" title="Play">▶</button>
+      <button class="ff-toolbtn small" title="Stop">■</button>
+      <button class="ff-toolbtn small" title="Palette Left">◀</button>
+      <button class="ff-toolbtn small" title="Palette Right">▶</button>
+    </div>
+
+
+    <div class="ff-theme-scene" aria-label="Kyubi and Tobi themed background">
+      <div class="scene-aura aura-left"></div>
+      <div class="scene-aura aura-right"></div>
+      <div class="theme-sigil theme-sigil-fox">
+        <svg viewBox="0 0 430 180" aria-hidden="true">
+          <defs>
+            <linearGradient id="foxFaceFill" x1="0" x2="1">
+              <stop offset="0%" stop-color="#ffbf47"/>
+              <stop offset="100%" stop-color="#ff7b18"/>
+            </linearGradient>
+          </defs>
+          <path d="M34 134c46-58 98-86 181-86 85 0 147 27 194 86-45-21-99-31-194-31-93 0-146 9-181 31Z" fill="rgba(255,137,24,.20)"/>
+          <path d="M78 120c35-31 78-46 138-46 62 0 109 15 146 47-32-14-74-21-146-21-69 0-107 5-138 20Z" fill="rgba(255,208,94,.18)"/>
+          <path d="M78 77c30-24 62-30 112-18 11 3 21 7 31 15-23-2-41 0-68 8-26 7-48 5-75-5Z" fill="url(#foxFaceFill)" opacity=".95"/>
+          <path d="M244 74c11-8 21-12 31-15 50-12 82-6 112 18-27 10-49 12-75 5-27-8-45-10-68-8Z" fill="url(#foxFaceFill)" opacity=".95"/>
+          <path d="M52 83c31-18 72-20 116-8" stroke="rgba(255,245,214,.84)" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M263 75c44-12 85-10 116 8" stroke="rgba(255,245,214,.84)" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <ellipse cx="148" cy="101" rx="9" ry="9" fill="rgba(255,244,215,.72)"/>
+          <ellipse cx="282" cy="101" rx="9" ry="9" fill="rgba(255,244,215,.72)"/>
+          <path d="M146 129c25-6 99-6 124 0" stroke="rgba(255,241,194,.58)" stroke-width="10" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="theme-sigil theme-sigil-mask">
+        <svg viewBox="0 0 360 360" aria-hidden="true">
+          <defs>
+            <radialGradient id="maskHalo" cx="50%" cy="50%" r="58%">
+              <stop offset="0%" stop-color="#ffb347" stop-opacity=".56"/>
+              <stop offset="65%" stop-color="#ff7b1a" stop-opacity=".21"/>
+              <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="180" cy="180" r="136" fill="url(#maskHalo)"/>
+          <circle cx="180" cy="180" r="120" fill="none" stroke="rgba(255,234,196,.26)" stroke-width="16"/>
+          <circle cx="180" cy="180" r="90" fill="none" stroke="rgba(18,10,10,.46)" stroke-width="12"/>
+          <path d="M112 109c40-22 94-22 136 0" stroke="rgba(255,240,205,.25)" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M116 118c56 15 98 54 122 116" stroke="rgba(255,237,186,.22)" stroke-width="15" stroke-linecap="round" fill="none"/>
+          <path d="M137 95c20 8 31 20 43 34" stroke="rgba(255,238,190,.16)" stroke-width="9" stroke-linecap="round" fill="none"/>
+          <path d="M223 95c-20 8-31 20-43 34" stroke="rgba(255,238,190,.16)" stroke-width="9" stroke-linecap="round" fill="none"/>
+          <ellipse cx="214" cy="165" rx="28" ry="28" fill="rgba(10,6,7,.62)"/>
+        </svg>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-section">
+        <div class="section-title"><h2>Workspace</h2></div>
+        <div id="drop" class="drop upload-drop">
+          <b>Masukkan file converter</b>
+          <span class="small">Support SWF, PNG, audio, SFF, SND, AIR, CNS, CMD, DEF, TXT, ZIP.</span>
+          <label class="upload-btn main-upload">
+            <input id="fileInput" type="file" multiple />
+            <span class="upload-icon">📦</span>
+            <span>Pilih File Project</span>
+          </label>
+        </div>
+        <div class="row">
+          <button id="btnAutoSort">Auto sort</button>
+          <button id="btnProjectFill" class="ghost">Apply Project</button>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="section-title"><h2>Ringkasan</h2></div>
+        <div class="kv">
+          <div class="side-card"><div class="small">Input files</div><div id="sumInput" style="font-size:22px;font-weight:900;color:#fff2c7">0</div></div>
+          <div class="side-card"><div class="small">Output files</div><div id="sumOutput" style="font-size:22px;font-weight:900;color:#fff2c7">0</div></div>
+          <div class="side-card"><div class="small">Sprites</div><div id="sumSprite" style="font-size:22px;font-weight:900;color:#fff2c7">0</div></div>
+          <div class="side-card"><div class="small">Audio</div><div id="sumAudio" style="font-size:22px;font-weight:900;color:#fff2c7">0</div></div>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="section-title"><h2>Files</h2><span class="small" id="activeName">No active file</span></div>
+        <div id="fileList" class="file-list small"></div>
+      </div>
+
+      <div class="side-section">
+        <div class="section-title"><h2>Quick Actions</h2></div>
+        <div class="row stretch">
+          <button id="btnExtractSwfQuick" class="primary">Extract SWF</button>
+          <button id="btnInspectQuick" class="good">Inspect</button>
+        </div>
+        <div class="row stretch">
+          <button id="btnBuildAirQuick" class="warn">Generate AIR</button>
+          <button id="btnBuildDefQuick" class="ghost">Generate DEF</button>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="dash-grid">
+        <div class="stat-card"><span>Project</span><b id="dashProject">New Character</b></div>
+        <div class="stat-card"><span>Active File</span><b id="dashActive">-</b></div>
+        <div class="stat-card"><span>Spritesheet</span><b id="dashSheet">Ready</b></div>
+        <div class="stat-card"><span>Theme</span><b>Kyubi / Tobi</b></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="dashboard">Dashboard</button>
+        <button class="tab" data-tab="project">Project</button>
+        <button class="tab" data-tab="swf">SWF Extract</button>
+        <button class="tab" data-tab="sprite">Sprite Edit</button>
+        <button class="tab" data-tab="sound">Sound Edit</button>
+        <button class="tab" data-tab="mugen">MUGEN Builder</button>
+        <button class="tab" data-tab="inspect">SFF / SND Inspector</button>
+        <button class="tab" data-tab="text">Text Editor</button>
+        <button class="tab" data-tab="export">Export</button>
+      </div>
+
+      <section id="tab-dashboard" class="panel tabpane">
+        <h2>Dashboard</h2>
+        <div class="split">
+          <div>
+            <div class="notice small">Workspace ini dibuat agar terasa seperti tool editor: banyak tab khusus, sidebar file, project config, preview sprite, preview sound, editor teks, builder MUGEN, dan export ZIP.</div>
+            <h3>Quick Modules</h3>
+            <div class="quick-grid">
+              <div class="quick-card"><b>SWF Extractor</b><div class="small">Ekstrak bitmap dan audio dari SWF ke bagian-bagian terpisah.</div></div>
+              <div class="quick-card"><b>Sprite Editor</b><div class="small">Lihat sprite, atur group/image/x/y/palette, dan buat spritesheet.</div></div>
+              <div class="quick-card"><b>Sound Editor</b><div class="small">Preview audio, batch rename, dan ekspor audio pack.</div></div>
+              <div class="quick-card"><b>MUGEN Builder</b><div class="small">Generate .sffdef, .air, .def, .cmd, dan .cns draft.</div></div>
+              <div class="quick-card"><b>Inspector</b><div class="small">Cek signature SWF, SFF, SND, serta scan isi biner dasar.</div></div>
+              <div class="quick-card"><b>Export Center</b><div class="small">Ekspor PNG pack, audio pack, project MUGEN, atau semua hasil.</div></div>
+            </div>
+            <h3>Activity Log</h3>
+            <div id="swfLog" class="status mono small"></div>
+          </div>
+          <div>
+            <h3>Project Snapshot</h3>
+            <div class="side-card">
+              <div class="small">Name</div><div id="snapName" style="font-weight:900;font-size:18px;color:#fff0c0">New Character</div>
+              <div class="small" style="margin-top:8px">Author</div><div id="snapAuthor">Converted</div>
+              <div class="small" style="margin-top:8px">Files</div><div id="snapFiles">sprite = character.sff | sound = character.snd | anim = character.air</div>
+            </div>
+            <h3>Output Note</h3>
+            <div class="success small">Tool ini menjaga hasil tetap rapih: output disusun ke folder seperti <span class="mono">swf_images/</span>, <span class="mono">swf_audio/</span>, <span class="mono">spritesheet/</span>, <span class="mono">mugen_project/</span>, dan <span class="mono">edited/</span>.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-project" class="panel tabpane hide">
+        <h2>Project Config</h2>
+        <div class="mode-filebar">
+          <label class="upload-btn"><input id="projectInput" type="file" multiple accept=".def,.cmd,.cns,.air,.sff,.snd,.zip"><span>📁</span> Add Project / Single Character</label>
+          <span class="small">Bisa pakai file DEF/CMD/CNS/AIR/SFF/SND atau ZIP project.</span>
+        </div>
+        <div class="project-grid">
+          <div class="field"><label>Internal Name</label><input id="p_name" value="New Character"></div>
+          <div class="field"><label>Display Name</label><input id="p_displayname" value="New Character"></div>
+          <div class="field"><label>Author</label><input id="p_author" value="Converted"></div>
+          <div class="field"><label>Version Date</label><input id="p_versiondate" value="07,01,2026"></div>
+          <div class="field"><label>MUGEN Version</label><input id="p_mugenversion" value="1.0"></div>
+          <div class="field"><label>CMD File</label><input id="p_cmd" value="character.cmd"></div>
+          <div class="field"><label>CNS File</label><input id="p_cns" value="character.cns"></div>
+          <div class="field"><label>ST File</label><input id="p_st" value="character.cns"></div>
+          <div class="field"><label>Sprite File</label><input id="p_sprite" value="character.sff"></div>
+          <div class="field"><label>Anim File</label><input id="p_anim" value="character.air"></div>
+          <div class="field"><label>Sound File</label><input id="p_sound" value="character.snd"></div>
+          <div class="field"><label>Palette Key</label><input id="p_palette" value="x = 1"></div>
+        </div>
+        <div class="row">
+          <button id="btnProjectApply" class="primary">Apply Project Config</button>
+          <button id="btnBuildCmd" class="good">Generate CMD draft</button>
+          <button id="btnBuildCns" class="good">Generate CNS draft</button>
+          <button id="btnSaveProject" class="warn">Save Full Project</button>
+        </div>
+        <div id="projectRouteInfo" class="notice small">Project routing: sprite, audio, text, dan inspector akan terpisah otomatis ke mode terkait. Export di luar tab menyimpan semuanya menjadi satu project.</div>
+        <div class="footer-note">Tab ini dipakai untuk mengontrol isi file DEF dan draft project lain agar lebih seperti workspace Fighter Factory.</div>
+      </section>
+
+      <section id="tab-swf" class="panel tabpane hide">
+        <h2>SWF Extractor</h2>
+        <div class="mode-filebar">
+          <label class="upload-btn"><input id="swfInput" type="file" multiple accept=".swf"><span>⚡</span> Add SWF khusus</label>
+          <span class="small">File SWF bisa berbeda dari file project.</span>
+        </div>
+        <div class="notice small">SWF bitmap dan audio akan diekstrak dari tag asli. Vector shape/timeline SWF belum bisa dirender sempurna tanpa engine Flash/Ruffle. CWS zlib didukung lewat browser modern, ZWS/LZMA belum.</div>
+        <div class="row">
+          <button id="btnExtractSwf" class="primary">Extract SWF aktif</button>
+          <button id="btnSpriteSheet" class="good">Buat spritesheet dari PNG</button>
+          <label class="small">Kolom <input id="sheetCols" type="number" value="8" min="1" max="64" style="width:70px"></label>
+          <label class="small">Padding <input id="sheetPad" type="number" value="2" min="0" max="64" style="width:70px"></label>
+        </div>
+        <div class="progress"><div id="swfBar" class="bar"></div></div>
+        <h3>Preview PNG</h3>
+        <div id="pngCards" class="cards"></div>
+      </section>
+
+      <section id="tab-sprite" class="panel tabpane hide">
+        <h2>Sprite Edit</h2>
+        <div class="mode-filebar">
+          <label class="upload-btn"><input id="spriteInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.gif"><span>🖼️</span> Add Sprite / PNG</label>
+          <label class="upload-btn"><input id="sffInput" type="file" multiple accept=".sff"><span>🧩</span> Add SFF</label>
+          <span class="small">Sprite bisa di-zoom sampai level pixel dan bisa diwarnai.</span>
+        </div>
+        <div class="pixel-editor-panel">
+          <div class="pixel-toolbar">
+            <button id="btnLoadPixel" class="primary">Load Selected Sprite</button>
+            <button id="btnPencil">Pencil</button>
+            <button id="btnEraser">Eraser</button>
+            <button id="btnPicker">Picker</button>
+            <label class="color-chip">Color <input id="paintColor" type="color" value="#ff8d18"></label>
+            <label class="small">Zoom <input id="pixelZoom" type="range" min="1" max="32" value="8"> <span id="pixelZoomText">8x</span></label>
+            <button id="btnCopySprite" class="good">Copy PNG</button>
+            <button id="btnSaveSpriteEdit" class="warn">Save Edited Sprite</button>
+          </div>
+          <div class="pixel-workbench">
+            <div class="pixel-ruler top-ruler"></div>
+            <div class="pixel-canvas-shell">
+              <canvas id="pixelCanvas" width="64" height="64"></canvas>
+            </div>
+          </div>
+          <div id="pixelInfo" class="small">Pilih sprite, lalu tekan Load Selected Sprite. Zoom besar membuat pixel 1x terlihat jelas.</div>
+        </div>
+        <div class="sprite-focus">
+          <div class="focus-preview">
+            <div class="small">Selected Sprite</div>
+            <div class="thumb" id="focusThumb"><span class="small">Belum ada sprite</span></div>
+            <div id="focusMeta" class="small" style="margin-top:8px">Pilih sprite pada tabel atau preview.</div>
+          </div>
+          <div>
+            <div class="row">
+              <button id="btnRenumber" class="warn">Auto number sprites</button>
+              <button id="btnFillCenters">Set X/Y = 0</button>
+              <input id="renamePrefix" placeholder="rename prefix, contoh zetsu_">
+              <button id="btnBatchRename">Batch rename</button>
+            </div>
+            <div class="table-wrap">
+              <table class="table small" id="spriteTable">
+                <thead><tr><th>File</th><th>Group</th><th>Image</th><th>X</th><th>Y</th><th>Palette</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-sound" class="panel tabpane hide">
+        <h2>Sound Edit</h2>
+        <div class="mode-filebar">
+          <label class="upload-btn"><input id="soundInput" type="file" multiple accept=".wav,.mp3,.ogg,.snd"><span>🔊</span> Add Sound / SND</label>
+          <span class="small">Mode sound punya input sendiri, jadi tidak tercampur dengan sprite.</span>
+        </div>
+        <div class="row">
+          <button id="btnCollectAudio" class="primary">Refresh Audio List</button>
+          <input id="soundPrefix" placeholder="rename prefix, contoh voice_">
+          <button id="btnRenameAudio">Batch rename audio</button>
+          <button id="btnExportAudio2" class="good">Export audio pack</button>
+        </div>
+        <div class="notice small">Tab ini fokus untuk preview dan penataan audio yang sudah diekstrak atau diinput. Jika SWF aktif, ekstrak audio dulu pada tab SWF atau Quick Actions.</div>
+        <div id="soundList" class="sound-list"></div>
+      </section>
+
+      <section id="tab-mugen" class="panel tabpane hide">
+        <h2>MUGEN Builder</h2>
+        <div class="notice small">Builder membuat project MUGEN siap compile: PNG + .sffdef untuk SprMake2, .air, .def, .cmd, dan .cns draft. Ini lebih rapi untuk workflow converter.</div>
+        <div class="row">
+          <button id="btnBuildSffDef" class="primary">Generate SFFDEF</button>
+          <button id="btnBuildAir" class="good">Generate AIR draft</button>
+          <button id="btnBuildDef" class="good">Generate DEF draft</button>
+          <button id="btnBuildCmd2">Generate CMD draft</button>
+          <button id="btnBuildCns2">Generate CNS draft</button>
+        </div>
+        <div class="split">
+          <div>
+            <h3>Builder Status</h3>
+            <div id="buildStatus" class="status mono small"></div>
+          </div>
+          <div>
+            <h3>Current Rules</h3>
+            <div class="side-card small">
+              <div>- Sprite file akan disusun dari input/output PNG aktif.</div>
+              <div>- Group dan image mengikuti tabel Sprite Edit.</div>
+              <div>- DEF mengikuti Project Config.</div>
+              <div>- AIR draft dibuat otomatis per group action.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-inspect" class="panel tabpane hide">
+        <h2>SFF / SND Inspector</h2>
+        <div class="mode-filebar">
+          <label class="upload-btn"><input id="inspectInput" type="file" multiple accept=".sff,.snd,.swf,.zip"><span>🔎</span> Add File Inspector</label>
+        </div>
+        <div class="row">
+          <button id="btnInspect" class="primary">Inspect file aktif</button>
+          <button id="btnExtractSnd" class="good">Extract SND sounds</button>
+        </div>
+        <div class="notice small">Inspector membaca header dan struktur dasar. Untuk SFF v2 dengan kompresi custom RLE5/RLE8/LZ5, tool ini menampilkan info dan menyimpan raw chunk bila pola bisa dikenali.</div>
+        <div id="inspectOut" class="status mono small"></div>
+      </section>
+
+      <section id="tab-text" class="panel tabpane hide">
+        <h2>Text Editor</h2>
+        <div class="mode-filebar">
+          <label class="upload-btn"><input id="textInput" type="file" multiple accept=".air,.cns,.cmd,.def,.st,.txt"><span>📝</span> Add Text File</label>
+        </div>
+        <div class="editor-toolbar">
+          <select id="textSelect"></select>
+          <button id="btnLoadText">Load</button>
+          <button id="btnSaveText" class="primary">Save sebagai output</button>
+          <button id="btnFormatAir">Format AIR ringan</button>
+        </div>
+        <textarea id="textEditor" spellcheck="false" placeholder="Pilih file teks atau generate AIR/CNS/CMD/DEF draft..."></textarea>
+      </section>
+
+      <section id="tab-export" class="panel tabpane hide">
+        <h2>Export Center</h2>
+        <div class="row">
+          <button id="btnExportPng" class="primary">Export PNG pack</button>
+          <button id="btnExportAudio" class="primary">Export audio pack</button>
+          <button id="btnExportMugen" class="good">Export MUGEN project</button>
+          <button id="btnExportAll2" class="good">Export semua</button>
+        </div>
+        <h3>Output Files</h3>
+        <div id="outputList" class="output-list small"></div>
+      </section>
+      <div class="ff-statusbar">
+        <span>Line: 1, Column: 1</span>
+        <span>Syntax error count: 0</span>
+        <span>Encoding: UTF-8</span>
+        <span>Project: Character</span>
+        <span>Theme: Naruto Kyubi / Tobi</span>
+      </div>
+    </main>
+  </div>
+</div>
+<footer class="app-footer">
+  <div class="footer-left">
+    <div class="footer-copy">© Zamuri</div>
+    <div class="footer-sub">Overall export menyimpan project penuh. Export di tab fokus pada jenis file tab tersebut.</div>
+  </div>
+  <div class="footer-center">
+    <div class="theme-switch-label">Theme</div>
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="naruto">Naruto</button>
+      <button class="theme-btn" data-theme="sasuke">Sasuke / Sakura</button>
+      <button class="theme-btn" data-theme="hinata">Hinata</button>
+      <button class="theme-btn" data-theme="kakashi">Kakashi</button>
+      <button class="theme-btn" data-theme="sai">Sai</button>
+      <button class="theme-btn" data-theme="yamato">Yamato</button>
+    </div>
+  </div>
+  <div class="footer-right">
+    <a class="yt-button" href="https://www.youtube.com/@senkilegends0" target="_blank" rel="noopener" aria-label="Open YouTube Senki Legends 0">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="1.5" y="4.5" width="21" height="15" rx="4.2" ry="4.2" fill="#ffffff22"/>
+        <path d="M23.5 6.2a3.01 3.01 0 0 0-2.12-2.13C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.57A3.01 3.01 0 0 0 .5 6.2C0 8.08 0 12 0 12s0 3.92.5 5.8a3.01 3.01 0 0 0 2.12 2.13C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.57a3.01 3.01 0 0 0 2.12-2.13C24 15.92 24 12 24 12s0-3.92-.5-5.8Z" fill="#fff" opacity=".18"/>
+        <path d="M9.3 15.8 16.2 12 9.3 8.2v7.6Z" fill="#fff"/>
+      </svg>
+      <span>YouTube</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+'use strict';
+let addFiles;
+const state={files:[],outputs:[],active:null,sprites:[],logs:[],audioRenames:new Map(),spriteSelection:null,project:{name:'New Character',displayname:'New Character',author:'Converted',versiondate:'07,01,2026',mugenversion:'1.0',cmd:'character.cmd',cns:'character.cns',st:'character.cns',sprite:'character.sff',anim:'character.air',sound:'character.snd',palette:'x = 1'}};
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const enc=new TextEncoder();
+function ext(name){return (name.split('.').pop()||'').toLowerCase()}
+function base(name){return name.replace(/\.[^.]+$/,'')}
+function sanitize(name){return name.replace(/[\\/:*?"<>|]+/g,'_').replace(/\s+/g,'_')}
+function sanitizePath(p){return p.split('/').map(sanitize).join('/')}
+function mimeFor(name){const e=ext(name);return e==='png'?'image/png':e==='jpg'||e==='jpeg'?'image/jpeg':e==='gif'?'image/gif':e==='ogg'?'audio/ogg':e==='mp3'?'audio/mpeg':e==='wav'?'audio/wav':'application/octet-stream'}
+function bytesToText(u8){try{return new TextDecoder('utf-8').decode(u8)}catch(e){return ''}}
+function asU8(data){if(data instanceof Uint8Array)return data;if(data instanceof ArrayBuffer)return new Uint8Array(data);return enc.encode(String(data))}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fileSize(n){if(n<1024)return n+' B'; if(n<1048576)return (n/1024).toFixed(1)+' KB'; return (n/1048576).toFixed(2)+' MB'}
+async function readAB(file){return await file.arrayBuffer()}
+function setBar(v){$('#swfBar').style.width=Math.max(0,Math.min(100,v))+'%'}
+function log(msg,cls=''){const el=$('#swfLog'); const line=document.createElement('div'); line.className='logline '+cls; line.textContent=msg; el.appendChild(line); el.scrollTop=el.scrollHeight; state.logs.push({msg,cls});}
+function clearLog(){ $('#swfLog').innerHTML=''; state.logs=[]; }
+function updateSummary(){
+  $('#sumInput').textContent=state.files.length;
+  $('#sumOutput').textContent=state.outputs.length;
+  $('#sumSprite').textContent=getPngLikeFiles().length;
+  $('#sumAudio').textContent=getAudioEntries().length;
+  $('#activeName').textContent=state.active?state.active.name:'No active file';
+  $('#dashActive').textContent=state.active?state.active.name:'-';
+  $('#dashProject').textContent=state.project.displayname||state.project.name||'New Character';
+  $('#snapName').textContent=state.project.displayname||state.project.name;
+  $('#snapAuthor').textContent=state.project.author;
+  $('#snapFiles').textContent='sprite = '+state.project.sprite+' | sound = '+state.project.sound+' | anim = '+state.project.anim;
+}
+function addOutput(path,data,type){state.outputs.push({path:sanitizePath(path),data,type:type||mimeFor(path)}); renderOutputs(); renderTextSelect(); updatePngPreview(); renderSoundList(); updateSummary();}
+function renderFiles(){
+  const box=$('#fileList'); box.innerHTML='';
+  state.files.forEach(f=>{
+    const d=document.createElement('div'); d.className='file-item'+(state.active===f?' active':'');
+    d.innerHTML='<span class="mono" title="'+escapeHtml(f.name)+'">'+escapeHtml(f.name)+'</span><span><span class="badge">'+escapeHtml(f.ext||'file')+'</span> '+fileSize(f.size||f.u8?.length||0)+'</span>';
+    d.onclick=()=>{state.active=f; renderFiles(); updateSummary(); inspectSelectionMeta();};
+    box.appendChild(d);
+  });
+  updateSummary();
+}
+function renderOutputs(){
+  const box=$('#outputList'); box.innerHTML='';
+  state.outputs.forEach(o=>{let len=asU8(o.data).length; const d=document.createElement('div'); d.className='file-item'; d.innerHTML='<span class="mono">'+escapeHtml(o.path)+'</span><span>'+fileSize(len)+'</span>'; box.appendChild(d)});
+}
+function renderTextSelect(){
+  const sel=$('#textSelect'); sel.innerHTML='';
+  state.files.filter(f=>['air','cns','cmd','def','st','txt'].includes(f.ext)).forEach(f=>{const opt=document.createElement('option'); opt.value=f.name; opt.textContent=f.name; sel.appendChild(opt)});
+  state.outputs.filter(o=>/\.(air|cns|cmd|def|st|txt|sffdef|json|plist)$/i.test(o.path)).forEach(o=>{const opt=document.createElement('option'); opt.value='out:'+o.path; opt.textContent='output/'+o.path; sel.appendChild(opt)});
+}
+function getPngLikeFiles(){
+  const arr=[];
+  state.files.filter(f=>['png','jpg','jpeg','webp','gif'].includes(f.ext)).forEach(f=>arr.push({name:f.name,data:f.u8,source:'input'}));
+  state.outputs.filter(o=>/\.(png|jpg|jpeg|webp|gif)$/i.test(o.path)).forEach(o=>arr.push({name:o.path.split('/').pop(),data:asU8(o.data),source:'output',full:o.path}));
+  return arr;
+}
+function getAudioEntries(){
+  const arr=[];
+  state.files.filter(f=>['wav','mp3','ogg'].includes(f.ext)).forEach(f=>arr.push({name:f.name,data:f.u8,source:'input',type:mimeFor(f.name)}));
+  state.outputs.filter(o=>/\.(wav|mp3|ogg)$/i.test(o.path)).forEach(o=>arr.push({name:o.path.split('/').pop(),data:asU8(o.data),source:'output',full:o.path,type:o.type||mimeFor(o.path)}));
+  return arr;
+}
+function updatePngPreview(){
+  const box=$('#pngCards'); box.innerHTML='';
+  getPngLikeFiles().slice(0,120).forEach((im,idx)=>{
+    const url=URL.createObjectURL(new Blob([im.data],{type:mimeFor(im.name)}));
+    const c=document.createElement('div'); c.className='card';
+    c.innerHTML='<div class="thumb"><img src="'+url+'"></div><div class="small mono">'+escapeHtml(im.name.slice(0,42))+'</div>';
+    c.onclick=()=>selectSpriteByName(im.name);
+    box.appendChild(c);
+  });
+  refreshSprites(); renderSpriteTable(); updateSummary();
+}
+function renderSoundList(){
+  const box=$('#soundList'); if(!box)return; box.innerHTML='';
+  const auds=getAudioEntries();
+  if(!auds.length){box.innerHTML='<div class="small">Belum ada audio.</div>'; updateSummary(); return;}
+  auds.forEach((a,i)=>{
+    const blob=new Blob([a.data],{type:a.type||mimeFor(a.name)}); const url=URL.createObjectURL(blob);
+    const d=document.createElement('div'); d.className='sound-item';
+    d.innerHTML='<div style="flex:1"><div class="mono">'+escapeHtml(a.name)+'</div><div class="small">'+escapeHtml(a.source)+' • '+fileSize(a.data.length||a.data.byteLength||0)+'</div><audio controls src="'+url+'"></audio></div>';
+    box.appendChild(d);
+  });
+  updateSummary();
+}
+function refreshSprites(){
+  const imgs=getPngLikeFiles();
+  if(!state.sprites.length || state.sprites.length!==imgs.length || !state.sprites.every((s,i)=>s.name===imgs[i].name)){
+    state.sprites=imgs.map((im,i)=>({name:im.name,group:Math.floor(i/100),image:i%100,x:0,y:0,palette:i===0?1:0}));
+  }
+}
+function renderSpriteTable(){
+  refreshSprites(); const tb=$('#spriteTable tbody'); if(!tb) return; tb.innerHTML='';
+  state.sprites.forEach((s,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td class="mono">'+escapeHtml(s.name)+'</td><td><input data-i="'+i+'" data-k="group" value="'+s.group+'"></td><td><input data-i="'+i+'" data-k="image" value="'+s.image+'"></td><td><input data-i="'+i+'" data-k="x" value="'+s.x+'"></td><td><input data-i="'+i+'" data-k="y" value="'+s.y+'"></td><td><input data-i="'+i+'" data-k="palette" value="'+s.palette+'"></td>';
+    tr.onclick=()=>selectSprite(i);
+    if(state.spriteSelection===i) tr.style.background='rgba(100,223,255,.08)';
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('input').forEach(inp=>inp.onchange=()=>{state.sprites[inp.dataset.i][inp.dataset.k]=parseInt(inp.value)||0; if(Number(inp.dataset.i)===state.spriteSelection) inspectSelectionMeta();});
+  inspectSelectionMeta();
+}
+function selectSprite(i){state.spriteSelection=i; renderSpriteTable(); inspectSelectionMeta();}
+function selectSpriteByName(name){refreshSprites(); const i=state.sprites.findIndex(s=>s.name===name); if(i>=0){state.spriteSelection=i; renderSpriteTable(); inspectSelectionMeta(); $$('.tab').forEach(t=>t.classList.remove('active')); $('.tab[data-tab="sprite"]').classList.add('active'); $$('.tabpane').forEach(p=>p.classList.add('hide')); $('#tab-sprite').classList.remove('hide');}}
+function inspectSelectionMeta(){
+  const focusThumb=$('#focusThumb'), focusMeta=$('#focusMeta');
+  if(state.spriteSelection==null || !state.sprites[state.spriteSelection]){focusThumb.innerHTML='<span class="small">Belum ada sprite</span>'; focusMeta.textContent='Pilih sprite pada tabel atau preview.'; return;}
+  const s=state.sprites[state.spriteSelection];
+  const im=getPngLikeFiles().find(x=>x.name===s.name);
+  if(im){const url=URL.createObjectURL(new Blob([im.data],{type:mimeFor(im.name)})); focusThumb.innerHTML='<img src="'+url+'">';}
+  else focusThumb.innerHTML='<span class="small">Preview tidak tersedia</span>';
+  focusMeta.innerHTML='File: <span class="mono">'+escapeHtml(s.name)+'</span><br>Group: '+s.group+' | Image: '+s.image+' | X: '+s.x+' | Y: '+s.y+' | Palette: '+s.palette;
+}
+
+$$('.tab').forEach(b=>b.onclick=()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+  $$('.tabpane').forEach(p=>p.classList.add('hide')); $('#tab-'+b.dataset.tab).classList.remove('hide');
+});
+
+$('#fileInput').onchange=e=>addFiles(e.target.files);
+const drop=$('#drop');
+drop.ondragover=e=>{e.preventDefault(); drop.classList.add('drag')};
+drop.ondragleave=()=>drop.classList.remove('drag');
+drop.ondrop=e=>{e.preventDefault(); drop.classList.remove('drag'); addFiles(e.dataTransfer.files)};
+$('#btnClear').onclick=()=>{state.files=[]; state.outputs=[]; state.active=null; state.sprites=[]; state.spriteSelection=null; clearLog(); $('#inspectOut').textContent=''; $('#textEditor').value=''; $('#buildStatus').textContent=''; setBar(0); renderFiles(); renderOutputs(); renderTextSelect(); renderSpriteTable(); updatePngPreview(); renderSoundList(); updateSummary();};
+$('#btnAutoSort').onclick=()=>{state.files.sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true})); renderFiles(); renderSpriteTable();};
+$('#btnProjectFill').onclick=()=>applyProject();
+$('#btnProjectApply').onclick=()=>applyProject();
+function applyProject(){
+  const keys=['name','displayname','author','versiondate','mugenversion','cmd','cns','st','sprite','anim','sound','palette'];
+  keys.forEach(k=>state.project[k]=$('#p_'+k).value.trim()||state.project[k]);
+  updateSummary();
+  log('Project config applied: '+state.project.displayname,'ok');
+}
+
+$('#btnManifest').onclick=()=>{
+  const man={created:new Date().toISOString(), project:state.project, inputs:state.files.map(f=>({name:f.name,size:f.size||f.u8.length,ext:f.ext})), outputs:state.outputs.map(o=>({path:o.path,size:asU8(o.data).length,type:o.type}))};
+  addOutput('manifest.json',JSON.stringify(man,null,2),'application/json');
+  addOutput('manifest.txt',state.files.map(f=>f.name+'\t'+fileSize(f.size||f.u8.length)).join('\n'),'text/plain');
+  log('Manifest dibuat.','ok');
+};
+
+async function inflateRawMaybe(data){
+  if(typeof DecompressionStream==='undefined') throw new Error('Browser tidak punya DecompressionStream. Pakai Chrome/Edge/Firefox modern.');
+  const ds=new DecompressionStream('deflate');
+  const stream=new Blob([data]).stream().pipeThrough(ds);
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+function readUI16(u8,o){return u8[o]|(u8[o+1]<<8)}
+function readUI32(u8,o){return (u8[o]|(u8[o+1]<<8)|(u8[o+2]<<16)|(u8[o+3]<<24))>>>0}
+function readTagHeader(u8,o){let codeLen=readUI16(u8,o), code=codeLen>>6, len=codeLen&0x3f; o+=2; if(len===0x3f){len=readUI32(u8,o); o+=4} return {code,len,body:o,next:o+len}}
+function skipRect(u8,o){const nbits=u8[o]>>3; const total=5+nbits*4; return o+Math.ceil(total/8)}
+async function getSwfBody(file){const u8=file.u8; const sig=String.fromCharCode(u8[0],u8[1],u8[2]); if(sig!=='FWS'&&sig!=='CWS'&&sig!=='ZWS') throw new Error('Bukan SWF atau signature tidak dikenal.'); const version=u8[3]; const flen=readUI32(u8,4); let body; if(sig==='FWS') body=u8.slice(8); else if(sig==='CWS') body=await inflateRawMaybe(u8.slice(8)); else throw new Error('ZWS/LZMA belum didukung di HTML ini.'); const full=new Uint8Array(8+body.length); full.set(u8.slice(0,8),0); full.set(body,8); full[0]=70; return {sig,version,declaredLength:flen,u8:full}}
+function imageExtFromBytes(u8){if(u8[0]===0x89&&u8[1]===0x50&&u8[2]===0x4e&&u8[3]===0x47)return'png'; if(u8[0]===0xff&&u8[1]===0xd8)return'jpg'; if(u8[0]===0x47&&u8[1]===0x49&&u8[2]===0x46)return'gif'; return'bin'}
+function writeStr(u8,o,s){for(let i=0;i<s.length;i++)u8[o+i]=s.charCodeAt(i)}
+function pcmToWav(data,rateCode,bitsFlag,stereoFlag){const rates=[5512,11025,22050,44100], sampleRate=rates[rateCode]||11025, channels=stereoFlag?2:1, bits=bitsFlag?16:8, blockAlign=channels*bits/8, byteRate=sampleRate*blockAlign; const out=new Uint8Array(44+data.length); const dv=new DataView(out.buffer); writeStr(out,0,'RIFF'); dv.setUint32(4,36+data.length,true); writeStr(out,8,'WAVE'); writeStr(out,12,'fmt '); dv.setUint32(16,16,true); dv.setUint16(20,1,true); dv.setUint16(22,channels,true); dv.setUint32(24,sampleRate,true); dv.setUint32(28,byteRate,true); dv.setUint16(32,blockAlign,true); dv.setUint16(34,bits,true); writeStr(out,36,'data'); dv.setUint32(40,data.length,true); out.set(data,44); return out}
+async function rgbaToPng(rgba,w,h){const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d'); ctx.putImageData(new ImageData(rgba,w,h),0,0); const blob=await new Promise(res=>c.toBlob(res,'image/png')); return new Uint8Array(await blob.arrayBuffer())}
+async function extractLossless(body,code){const id=readUI16(body,0), fmt=body[2], w=readUI16(body,3), h=readUI16(body,5); let off=7, colorTableSize=0; if(fmt===3){colorTableSize=body[7]+1; off=8} const z=body.slice(off); let raw; try{raw=await inflateRawMaybe(z)}catch(e){return null} let rgba=new Uint8ClampedArray(w*h*4);
+  if(fmt===5){let p=0; for(let y=0;y<h;y++){for(let x=0;x<w;x++){const i=(y*w+x)*4; if(code===36){rgba[i+3]=raw[p++]; rgba[i]=raw[p++]; rgba[i+1]=raw[p++]; rgba[i+2]=raw[p++];} else {p++; rgba[i]=raw[p++]; rgba[i+1]=raw[p++]; rgba[i+2]=raw[p++]; rgba[i+3]=255;}}} return {id,u8:await rgbaToPng(rgba,w,h)}}
+  if(fmt===3){let p=0; const palette=[]; for(let i=0;i<colorTableSize;i++){ if(code===36) palette.push([raw[p++],raw[p++],raw[p++],raw[p++]]); else palette.push([raw[p++],raw[p++],raw[p++],255]); } const rowBytes=Math.ceil(w/4)*4; for(let y=0;y<h;y++){for(let x=0;x<w;x++){const idx=raw[p+y*rowBytes+x], c=palette[idx]||[0,0,0,0], j=(y*w+x)*4; rgba[j]=c[0]; rgba[j+1]=c[1]; rgba[j+2]=c[2]; rgba[j+3]=c[3];}} return {id,u8:await rgbaToPng(rgba,w,h)}}
+  return null;
+}
+async function extractSwf(file){ clearLog(); setBar(0); const swf=await getSwfBody(file); log('SWF: '+file.name+' | '+swf.sig+' v'+swf.version+' | '+fileSize(swf.u8.length),'ok'); let o=8; o=skipRect(swf.u8,o); const frameRateRaw=readUI16(swf.u8,o); o+=2; const frameCount=readUI16(swf.u8,o); o+=2; log('Frames: '+frameCount+' | frameRateRaw: '+frameRateRaw); let tagCount=0,bmpCount=0,sndCount=0,lossCount=0,unsupported=0;
+  while(o<swf.u8.length-2){const t=readTagHeader(swf.u8,o); if(t.next>swf.u8.length) break; tagCount++; const body=swf.u8.slice(t.body,t.next); try{
+    if([21,35,90].includes(t.code)){
+      const id=readUI16(body,0); let img=body.slice(2); if(t.code===35||t.code===90){let alphaOff=readUI32(body,2); img=body.slice(6,6+alphaOff)}
+      const ex=imageExtFromBytes(img); const path='swf_images/bitmap_'+id+'.'+(ex==='bin'?'jpg':ex); addOutput(path,img,mimeFor(path)); bmpCount++; log('Bitmap tag '+t.code+' ID '+id+' -> '+path,'ok');
+    } else if([20,36].includes(t.code)){
+      const out=await extractLossless(body,t.code); if(out){addOutput('swf_images/bitmap_'+out.id+'.png',out.u8,'image/png'); bmpCount++; lossCount++; log('Lossless bitmap ID '+out.id+' -> png','ok')} else {unsupported++; log('Lossless tag '+t.code+' belum bisa dibaca formatnya','warnc');}
+    } else if(t.code===14){
+      const id=readUI16(body,0), packed=body[2], format=packed>>4, rate=(packed>>2)&3, bits=(packed>>1)&1, stereo=packed&1, samples=readUI32(body,3), data=body.slice(7);
+      let name='swf_audio/sound_'+id, out=data, type='application/octet-stream';
+      if(format===2){out=data.slice(2); name+='.mp3'; type='audio/mpeg'} else if(format===3){out=pcmToWav(data,rate,bits,stereo); name+='.wav'; type='audio/wav'} else {name+='.swf_audio_raw'}
+      addOutput(name,out,type); sndCount++; log('Sound ID '+id+' format '+format+' samples '+samples+' -> '+name,'ok');
+    }
+  } catch(e){unsupported++; log('Tag '+t.code+' error: '+e.message,'err')}
+  o=t.next; if(tagCount%50===0) setBar(o/swf.u8.length*100);
+  }
+  setBar(100); log('Selesai. Tags: '+tagCount+', bitmap: '+bmpCount+', lossless: '+lossCount+', audio: '+sndCount+', unsupported: '+unsupported,'ok'); renderSoundList(); updatePngPreview(); renderTextSelect(); renderSpriteTable(); updateSummary();
+}
+$('#btnExtractSwf').onclick=async()=>{try{if(!state.active||state.active.ext!=='swf') throw new Error('Pilih file .swf dulu dari panel kiri.'); await extractSwf(state.active)}catch(e){log(e.message,'err')}};
+$('#btnExtractSwfQuick').onclick=$('#btnExtractSwf').onclick;
+
+async function makeSpriteSheet(){
+  const imgs=getPngLikeFiles(); if(!imgs.length){alert('Belum ada PNG/JPG.'); return}
+  const cols=parseInt($('#sheetCols').value)||8, pad=parseInt($('#sheetPad').value)||0; const loaded=[];
+  for(const im of imgs){try{const blob=new Blob([im.data],{type:mimeFor(im.name)}); const bmp=await createImageBitmap(blob); loaded.push({...im,bmp})}catch(e){}}
+  const cellW=Math.max(...loaded.map(i=>i.bmp.width)), cellH=Math.max(...loaded.map(i=>i.bmp.height)); const rows=Math.ceil(loaded.length/cols); const c=document.createElement('canvas'); c.width=cols*(cellW+pad)+pad; c.height=rows*(cellH+pad)+pad; const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); const frames={};
+  loaded.forEach((im,i)=>{const col=i%cols,row=Math.floor(i/cols),x=pad+col*(cellW+pad),y=pad+row*(cellH+pad); ctx.drawImage(im.bmp,x,y); frames[im.name]={frame:{x,y,w:im.bmp.width,h:im.bmp.height},rotated:false,trimmed:false,spriteSourceSize:{x:0,y:0,w:im.bmp.width,h:im.bmp.height},sourceSize:{w:im.bmp.width,h:im.bmp.height}}});
+  const blob=await new Promise(res=>c.toBlob(res,'image/png')); const u8=new Uint8Array(await blob.arrayBuffer()); addOutput('spritesheet/sheet.png',u8,'image/png'); addOutput('spritesheet/sheet.json',JSON.stringify({frames,meta:{app:'Naruto MUGEN Fighter Factory Converter',image:'sheet.png',size:{w:c.width,h:c.height},scale:'1'}},null,2),'application/json'); addOutput('spritesheet/sheet.plist',jsonToPlist({frames,metadata:{format:3,textureFileName:'sheet.png',size:`{${c.width},${c.height}}`}}),'text/xml'); $('#dashSheet').textContent='Built'; alert('Spritesheet dibuat. Lihat tab Export.');
+}
+$('#btnSpriteSheet').onclick=makeSpriteSheet;
+function jsonToPlist(obj){function val(v){if(typeof v==='number')return'<integer>'+v+'</integer>'; if(typeof v==='boolean')return v?'<true/>':'<false/>'; if(typeof v==='string')return'<string>'+escapeHtml(v)+'</string>'; if(Array.isArray(v))return'<array>'+v.map(val).join('')+'</array>'; return dict(v)} function dict(o){return'<dict>'+Object.keys(o).map(k=>'<key>'+escapeHtml(k)+'</key>'+val(o[k])).join('')+'</dict>'} return'<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n'+dict(obj)+'\n</plist>'}
+
+$('#btnRenumber').onclick=()=>{refreshSprites(); state.sprites.forEach((s,i)=>{s.group=Math.floor(i/100); s.image=i%100; s.x=0; s.y=0; s.palette=i===0?1:0}); renderSpriteTable(); log('Sprite numbering diperbarui.','ok');};
+$('#btnFillCenters').onclick=()=>{refreshSprites(); state.sprites.forEach(s=>{s.x=0;s.y=0}); renderSpriteTable(); log('Semua X/Y sprite di-set ke 0.','ok');};
+$('#btnBatchRename').onclick=()=>{
+  const pre=$('#renamePrefix').value.trim(); if(!pre){alert('Isi prefix dulu.'); return}
+  refreshSprites(); state.sprites.forEach((s,i)=>{const old=s.name, e=ext(old); s.name=pre+String(i).padStart(3,'0')+'.'+e;}); renderSpriteTable(); log('Nama sprite pada tabel diganti dengan prefix '+pre,'ok');
+};
+$('#btnCollectAudio').onclick=()=>{renderSoundList(); log('Audio list direfresh.','ok');};
+$('#btnRenameAudio').onclick=()=>{
+  const pre=$('#soundPrefix').value.trim(); if(!pre){alert('Isi prefix dulu.'); return}
+  let n=0; state.outputs.forEach(o=>{if(/\.(wav|mp3|ogg)$/i.test(o.path)){o.path='edited_audio/'+pre+String(n).padStart(3,'0')+'.'+ext(o.path); n++;}}); renderOutputs(); renderSoundList(); log('Audio output di-rename dengan prefix '+pre,'ok');
+};
+$('#btnExportAudio2').onclick=()=>$('#btnExportAudio').click();
+
+function generateSffDef(){refreshSprites(); let lines=['; Generated by Naruto MUGEN Fighter Factory Converter','; Use with Elecbyte SprMake2 to compile SFF v2.','[Output]','filename = '+state.project.sprite,'','[Option]','sprite.compress.5 = 0','sprite.compress.8 = 0','sprite.compress.24 = 0','sprite.compress.32 = 0','','[Sprites]']; state.sprites.forEach(s=>lines.push(`${s.group}, ${s.image}, ${s.name}, ${s.x}, ${s.y}`)); return lines.join('\n')+'\n'}
+function generateAir(){refreshSprites(); let lines=['; Generated AIR draft','; Format: group, image, x, y, time','']; let current=null; state.sprites.forEach((s,i)=>{if(s.group!==current){current=s.group; lines.push('[Begin Action '+s.group+']')} lines.push(`${s.group}, ${s.image}, ${s.x}, ${s.y}, 4`); if(i<state.sprites.length-1&&state.sprites[i+1].group!==current) lines.push('')}); return lines.join('\n')+'\n'}
+function generateDef(){return ['; Generated MUGEN character DEF draft','[Info]','name = "'+state.project.name+'"','displayname = "'+state.project.displayname+'"','versiondate = '+state.project.versiondate,'mugenversion = '+state.project.mugenversion,'author = "'+state.project.author+'"','','[Files]','cmd = '+state.project.cmd,'cns = '+state.project.cns,'st = '+state.project.st,'sprite = '+state.project.sprite,'anim = '+state.project.anim,'sound = '+state.project.sound,'','[Palette Keymap]',state.project.palette,''].join('\n')}
+function generateCmd(){return ['; Generated CMD draft','[Remap]','','[Defaults]','command.time = 15','command.buffer.time = 1','','[Command]','name = "holdfwd"','command = /F','time = 1','','[State -1, AI Placeholder]','type = ChangeState','value = 0','trigger1 = 0',''].join('\n')}
+function generateCns(){return ['; Generated CNS draft','[Data]','life = 1000','power = 3000','attack = 100','defence = 100','fall.defence_up = 50','liedown.time = 60','airjuggle = 15','sparkno = S1','guard.sparkno = S1','ko.echo = 0','volume = 0','','[Size]','xscale = 1','yscale = 1','ground.back = 15','ground.front = 16','air.back = 12','air.front = 12',''].join('\n')}
+function setTextAndOutput(path,txt){ addOutput(path,txt,'text/plain'); $('#textEditor').value=txt; $('#buildStatus').textContent='Generated: '+path+'\n\n'+txt.slice(0,1600); renderTextSelect(); }
+$('#btnBuildSffDef').onclick=()=>{setTextAndOutput('mugen_project/character.sffdef',generateSffDef()); log('SFFDEF generated.','ok');};
+$('#btnBuildAir').onclick=()=>{setTextAndOutput('mugen_project/'+state.project.anim,generateAir()); log('AIR generated.','ok');};
+$('#btnBuildAirQuick').onclick=$('#btnBuildAir').onclick;
+$('#btnBuildDef').onclick=()=>{setTextAndOutput('mugen_project/'+state.project.displayname.replace(/\s+/g,'_').toLowerCase()+'.def',generateDef()); log('DEF generated.','ok');};
+$('#btnBuildDefQuick').onclick=$('#btnBuildDef').onclick;
+$('#btnBuildCmd').onclick=()=>{setTextAndOutput('mugen_project/'+state.project.cmd,generateCmd()); log('CMD generated.','ok');};
+$('#btnBuildCmd2').onclick=$('#btnBuildCmd').onclick;
+$('#btnBuildCns').onclick=()=>{setTextAndOutput('mugen_project/'+state.project.cns,generateCns()); log('CNS generated.','ok');};
+$('#btnBuildCns2').onclick=$('#btnBuildCns').onclick;
+
+function inspectSff(u8){let out=[]; const s=bytesToText(u8.slice(0,12)); if(s.includes('ElecbyteSpr')){out.push('Detected: MUGEN SFF style header'); out.push('Raw header hex: '+Array.from(u8.slice(0,64)).map(x=>x.toString(16).padStart(2,'0')).join(' ')); out.push('Catatan: extractor binary SFF penuh belum aktif. Gunakan SprMake2/SFF tools untuk compile/decompile penuh.')} else out.push('SFF header tidak dikenali atau varian berbeda.'); return out}
+function inspectSnd(u8){let out=[]; const s=bytesToText(u8.slice(0,12)); if(s.includes('ElecbyteSnd')){out.push('Detected: MUGEN SND header'); out.push('Raw header hex: '+Array.from(u8.slice(0,64)).map(x=>x.toString(16).padStart(2,'0')).join(' '));} else out.push('SND header tidak dikenali atau bukan MUGEN SND binary.'); return out}
+function inspectActive(){const f=state.active; if(!f){alert('Pilih file dulu.'); return} const u8=f.u8; let out=[]; out.push('File: '+f.name); out.push('Size: '+fileSize(u8.length)); const sig=bytesToText(u8.slice(0,16)).replace(/\0/g,'\\0'); out.push('Signature preview: '+sig); if(f.ext==='sff') out.push(...inspectSff(u8)); else if(f.ext==='snd') out.push(...inspectSnd(u8)); else if(f.ext==='swf') out.push('SWF signature: '+String.fromCharCode(u8[0],u8[1],u8[2])+' version '+u8[3]+' declared length '+readUI32(u8,4)); else out.push('Tidak ada inspector khusus untuk ekstensi ini.'); $('#inspectOut').textContent=out.join('\n'); log('Inspect selesai untuk '+f.name,'ok');}
+$('#btnInspect').onclick=inspectActive; $('#btnInspectQuick').onclick=inspectActive;
+$('#btnExtractSnd').onclick=()=>{const f=state.active; if(!f||f.ext!=='snd'){alert('Pilih file .snd dulu.'); return} const u8=f.u8; let found=0; for(let i=0;i<u8.length-4;i++){ if(u8[i]===0x52&&u8[i+1]===0x49&&u8[i+2]===0x46&&u8[i+3]===0x46){const len=readUI32(u8,i+4)+8; addOutput('snd_extract/sound_'+found+'.wav',u8.slice(i,i+len),'audio/wav'); found++; i+=len-1} else if(u8[i]===0xff&&(u8[i+1]&0xe0)===0xe0){let j=i+1; while(j<u8.length-2 && !(u8[j]===0&&u8[j+1]===0&&u8[j+2]===0)) j++; addOutput('snd_extract/sound_'+found+'.mp3',u8.slice(i,j),'audio/mpeg'); found++; i=j}}
+  $('#inspectOut').textContent='SND scan selesai. Audio ditemukan: '+found+'\nCatatan: ini scan signature, bukan parser SND penuh.'; renderOutputs(); renderSoundList(); log('SND audio extract selesai.','ok');
+};
+
+$('#btnLoadText').onclick=()=>{const v=$('#textSelect').value; if(!v) return; if(v.startsWith('out:')){const o=state.outputs.find(x=>x.path===v.slice(4)); $('#textEditor').value=o?String(o.data):''} else {const f=state.files.find(x=>x.name===v); $('#textEditor').value=f?bytesToText(f.u8):''}};
+$('#btnSaveText').onclick=()=>{const raw=($('#textSelect').value||'edited.txt').replace(/^out:/,'').split('/').pop()||'edited.txt'; addOutput('edited/'+raw,$('#textEditor').value,'text/plain'); renderTextSelect(); log('Text disimpan ke output edited/'+raw,'ok');};
+$('#btnFormatAir').onclick=()=>{let t=$('#textEditor').value; t=t.split('\n').map(l=>l.trim()).filter((l,i,a)=>l||a[i-1]).join('\n'); t=t.replace(/\n\[/g,'\n\n['); $('#textEditor').value=t+'\n'; log('AIR formatting ringan selesai.','ok');};
+
+function downloadBlob(blob,name){const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove()},500)}
+const crcTable=(()=>{let c,t=[]; for(let n=0;n<256;n++){c=n; for(let k=0;k<8;k++) c=((c&1)?(0xedb88320^(c>>>1)):(c>>>1)); t[n]=c>>>0} return t})();
+function crc32(u8){let c=0xffffffff; for(let i=0;i<u8.length;i++) c=crcTable[(c^u8[i])&0xff]^(c>>>8); return (c^0xffffffff)>>>0}
+function dosTime(d=new Date()){let time=(d.getHours()<<11)|(d.getMinutes()<<5)|(Math.floor(d.getSeconds()/2)); let date=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate(); return {time,date}}
+function u16(v){return[v&255,(v>>8)&255]} function u32(v){return[v&255,(v>>8)&255,(v>>16)&255,(v>>24)&255]}
+function concatU8(parts){let len=parts.reduce((a,p)=>a+p.length,0), out=new Uint8Array(len), o=0; for(const p of parts){out.set(p,o); o+=p.length} return out}
+function makeZip(entries){let locals=[], centrals=[], offset=0; const dt=dosTime(); for(const e of entries){const nameU=enc.encode(e.path), data=asU8(e.data), crc=crc32(data); const local=concatU8([new Uint8Array([0x50,0x4b,0x03,0x04]),new Uint8Array(u16(20)),new Uint8Array(u16(0x0800)),new Uint8Array(u16(0)),new Uint8Array(u16(dt.time)),new Uint8Array(u16(dt.date)),new Uint8Array(u32(crc)),new Uint8Array(u32(data.length)),new Uint8Array(u32(data.length)),new Uint8Array(u16(nameU.length)),new Uint8Array(u16(0)),nameU,data]); locals.push(local); const central=concatU8([new Uint8Array([0x50,0x4b,0x01,0x02]),new Uint8Array(u16(20)),new Uint8Array(u16(20)),new Uint8Array(u16(0x0800)),new Uint8Array(u16(0)),new Uint8Array(u16(dt.time)),new Uint8Array(u16(dt.date)),new Uint8Array(u32(crc)),new Uint8Array(u32(data.length)),new Uint8Array(u32(data.length)),new Uint8Array(u16(nameU.length)),new Uint8Array(u16(0)),new Uint8Array(u16(0)),new Uint8Array(u16(0)),new Uint8Array(u16(0)),new Uint8Array(u32(0)),new Uint8Array(u32(offset)),nameU]); centrals.push(central); offset+=local.length} const centralStart=offset, centralBlob=concatU8(centrals), end=concatU8([new Uint8Array([0x50,0x4b,0x05,0x06]),new Uint8Array(u16(0)),new Uint8Array(u16(0)),new Uint8Array(u16(entries.length)),new Uint8Array(u16(entries.length)),new Uint8Array(u32(centralBlob.length)),new Uint8Array(u32(centralStart)),new Uint8Array(u16(0))]); return new Blob([concatU8(locals),centralBlob,end],{type:'application/zip'})}
+function exportEntries(entries,name){if(!entries.length){alert('Tidak ada file untuk export.'); return} downloadBlob(makeZip(entries),name)}
+function exportAll(){const entries=[...state.outputs]; if(!entries.some(e=>e.path==='manifest.json')) entries.push({path:'manifest.json',data:JSON.stringify({created:new Date().toISOString(),project:state.project,outputs:state.outputs.map(o=>o.path)},null,2)}); exportEntries(entries,'mugen_converter_output.zip')}
+$('#btnExportAll').onclick=exportAll; $('#btnExportAll2').onclick=exportAll;
+$('#btnExportPng').onclick=()=>exportEntries(state.outputs.filter(o=>/\.(png|jpg|jpeg|webp|gif)$/i.test(o.path)),'png_pack.zip');
+$('#btnExportAudio').onclick=()=>exportEntries(state.outputs.filter(o=>/\.(ogg|mp3|wav|swf_audio_raw)$/i.test(o.path)),'audio_pack.zip');
+$('#btnExportMugen').onclick=()=>{const entries=[]; const imgs=getPngLikeFiles(); imgs.forEach(im=>entries.push({path:'mugen_project/'+im.name,data:im.data,type:mimeFor(im.name)})); entries.push({path:'mugen_project/character.sffdef',data:generateSffDef(),type:'text/plain'}); entries.push({path:'mugen_project/'+state.project.anim,data:generateAir(),type:'text/plain'}); entries.push({path:'mugen_project/'+state.project.displayname.replace(/\s+/g,'_').toLowerCase()+'.def',data:generateDef(),type:'text/plain'}); entries.push({path:'mugen_project/'+state.project.cmd,data:generateCmd(),type:'text/plain'}); entries.push({path:'mugen_project/'+state.project.cns,data:generateCns(),type:'text/plain'}); exportEntries(entries,'mugen_project_pack.zip')};
+
+async function tryReadZip(file){const u8=file.u8; if(!(u8[0]===0x50&&u8[1]===0x4b)) return false; let o=0,count=0; while(o<u8.length-30){ if(!(u8[o]===0x50&&u8[o+1]===0x4b&&u8[o+2]===0x03&&u8[o+3]===0x04)) break; const method=readUI16(u8,o+8), comp=readUI32(u8,o+18), nlen=readUI16(u8,o+26), xlen=readUI16(u8,o+28); const name=bytesToText(u8.slice(o+30,o+30+nlen)); const start=o+30+nlen+xlen; let data=u8.slice(start,start+comp); if(method===8){try{const ds=new DecompressionStream('deflate-raw'); const stream=new Blob([data]).stream().pipeThrough(ds); data=new Uint8Array(await new Response(stream).arrayBuffer())}catch(e){log('ZIP deflate gagal: '+name,'warnc')}} if(method===0||method===8){state.files.push({name:name,size:data.length,ext:ext(name),ab:data.buffer,u8:data,lastModified:Date.now()}); count++} o=start+comp }
+  if(count){log('ZIP dibuka: '+count+' file','ok'); renderFiles(); renderTextSelect(); renderSpriteTable(); updatePngPreview(); renderSoundList(); return true} return false;
+}
+addFiles=async function(list){for(const f of list){const ab=await readAB(f); const obj={name:f.name,size:f.size,ext:ext(f.name),ab,u8:new Uint8Array(ab),lastModified:f.lastModified}; if(obj.ext==='zip'){state.active=obj; state.files.push(obj); await tryReadZip(obj)} else {state.files.push(obj); if(!state.active) state.active=obj}} renderFiles(); renderTextSelect(); renderSpriteTable(); updatePngPreview(); renderSoundList(); updateSummary();};
+updateSummary(); renderFiles(); renderOutputs(); renderTextSelect(); renderSpriteTable(); updatePngPreview(); renderSoundList();
+</script>
+
+<script>
+(function(){
+  function bindModeFileInputs(){
+    ['projectInput','swfInput','spriteInput','sffInput','soundInput','inspectInput','textInput'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el && !el.dataset.bound){
+        el.dataset.bound='1';
+        el.addEventListener('change',function(e){
+          if(typeof addFiles==='function') addFiles(e.target.files);
+        });
+      }
+    });
+  }
+  bindModeFileInputs();
+  setTimeout(bindModeFileInputs, 300);
+
+  var pixelTool='pencil';
+  var pixelCanvas, pixelCtx, pixelName='', pixelLoaded=false;
+  var undoStack=[];
+  function getPixelCanvas(){
+    pixelCanvas=document.getElementById('pixelCanvas');
+    if(pixelCanvas) pixelCtx=pixelCanvas.getContext('2d', {willReadFrequently:true});
+    return pixelCanvas;
+  }
+  function getSelectedSpriteData(){
+    if(typeof state==='undefined') return null;
+    if(state.spriteSelection==null || !state.sprites[state.spriteSelection]) return null;
+    var s=state.sprites[state.spriteSelection];
+    var list=getPngLikeFiles();
+    var im=list.find(function(x){return x.name===s.name});
+    if(!im) return null;
+    return {sprite:s,img:im};
+  }
+  async function loadPixelSprite(){
+    if(!getPixelCanvas()) return;
+    var data=getSelectedSpriteData();
+    if(!data){ alert('Pilih sprite dulu dari tabel Sprite Edit atau preview PNG.'); return; }
+    var blob=new Blob([data.img.data],{type:mimeFor(data.img.name)});
+    var bmp;
+    try{ bmp=await createImageBitmap(blob); }
+    catch(e){ alert('Sprite tidak bisa dibuka di canvas.'); return; }
+    pixelName=data.sprite.name;
+    pixelCanvas.width=bmp.width;
+    pixelCanvas.height=bmp.height;
+    pixelCtx.clearRect(0,0,bmp.width,bmp.height);
+    pixelCtx.drawImage(bmp,0,0);
+    pixelLoaded=true;
+    undoStack=[];
+    updatePixelZoom();
+    var info=document.getElementById('pixelInfo');
+    if(info) info.textContent='Loaded: '+pixelName+' | '+bmp.width+'x'+bmp.height+' px. Gunakan zoom untuk melihat pixel 1x.';
+  }
+  function updatePixelZoom(){
+    if(!getPixelCanvas()) return;
+    var z=document.getElementById('pixelZoom');
+    var t=document.getElementById('pixelZoomText');
+    var zoom=parseInt(z&&z.value || '8') || 8;
+    pixelCanvas.style.width=(pixelCanvas.width*zoom)+'px';
+    pixelCanvas.style.height=(pixelCanvas.height*zoom)+'px';
+    if(t) t.textContent=zoom+'x';
+    var shell=document.querySelector('.pixel-canvas-shell');
+    if(shell){
+      shell.style.backgroundSize=(Math.max(4,zoom))+'px '+(Math.max(4,zoom))+'px';
+    }
+  }
+  function pushUndo(){
+    if(!pixelLoaded || !pixelCtx) return;
+    try{
+      undoStack.push(pixelCtx.getImageData(0,0,pixelCanvas.width,pixelCanvas.height));
+      if(undoStack.length>20) undoStack.shift();
+    }catch(e){}
+  }
+  function canvasPos(ev){
+    var rect=pixelCanvas.getBoundingClientRect();
+    var x=Math.floor((ev.clientX-rect.left) * pixelCanvas.width / rect.width);
+    var y=Math.floor((ev.clientY-rect.top) * pixelCanvas.height / rect.height);
+    return {x:Math.max(0,Math.min(pixelCanvas.width-1,x)), y:Math.max(0,Math.min(pixelCanvas.height-1,y))};
+  }
+  function paintAt(ev){
+    if(!pixelLoaded) return;
+    var p=canvasPos(ev);
+    if(pixelTool==='picker'){
+      var d=pixelCtx.getImageData(p.x,p.y,1,1).data;
+      var hex='#'+[d[0],d[1],d[2]].map(function(v){return v.toString(16).padStart(2,'0')}).join('');
+      var c=document.getElementById('paintColor'); if(c) c.value=hex;
+      return;
+    }
+    if(pixelTool==='eraser'){
+      pixelCtx.clearRect(p.x,p.y,1,1);
+      return;
+    }
+    var color=(document.getElementById('paintColor')||{}).value || '#ff8d18';
+    pixelCtx.fillStyle=color;
+    pixelCtx.fillRect(p.x,p.y,1,1);
+  }
+  function saveEditedSprite(){
+    if(!pixelLoaded){ alert('Load sprite dulu.'); return; }
+    pixelCanvas.toBlob(function(blob){
+      blob.arrayBuffer().then(function(ab){
+        addOutput('edited_sprites/'+(pixelName||'edited_sprite.png'), new Uint8Array(ab), 'image/png');
+        if(typeof log==='function') log('Edited sprite disimpan: '+pixelName,'ok');
+      });
+    }, 'image/png');
+  }
+  function copyEditedSprite(){
+    if(!pixelLoaded){ alert('Load sprite dulu.'); return; }
+    pixelCanvas.toBlob(async function(blob){
+      try{
+        if(navigator.clipboard && window.ClipboardItem){
+          await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+          if(typeof log==='function') log('Sprite PNG dicopy ke clipboard.','ok');
+        }else{
+          var a=document.createElement('a');
+          a.href=URL.createObjectURL(blob); a.download=pixelName||'edited_sprite.png';
+          document.body.appendChild(a); a.click(); a.remove();
+        }
+      }catch(e){
+        var a=document.createElement('a');
+        a.href=URL.createObjectURL(blob); a.download=pixelName||'edited_sprite.png';
+        document.body.appendChild(a); a.click(); a.remove();
+      }
+    }, 'image/png');
+  }
+  function initPixelEditor(){
+    if(!getPixelCanvas()) return;
+    var z=document.getElementById('pixelZoom');
+    if(z && !z.dataset.bound){z.dataset.bound='1'; z.addEventListener('input', updatePixelZoom);}
+    var btn=document.getElementById('btnLoadPixel'); if(btn && !btn.dataset.bound){btn.dataset.bound='1'; btn.addEventListener('click', loadPixelSprite);}
+    var b1=document.getElementById('btnPencil'); if(b1 && !b1.dataset.bound){b1.dataset.bound='1'; b1.addEventListener('click',function(){pixelTool='pencil'});}
+    var b2=document.getElementById('btnEraser'); if(b2 && !b2.dataset.bound){b2.dataset.bound='1'; b2.addEventListener('click',function(){pixelTool='eraser'});}
+    var b3=document.getElementById('btnPicker'); if(b3 && !b3.dataset.bound){b3.dataset.bound='1'; b3.addEventListener('click',function(){pixelTool='picker'});}
+    var bs=document.getElementById('btnSaveSpriteEdit'); if(bs && !bs.dataset.bound){bs.dataset.bound='1'; bs.addEventListener('click', saveEditedSprite);}
+    var bc=document.getElementById('btnCopySprite'); if(bc && !bc.dataset.bound){bc.dataset.bound='1'; bc.addEventListener('click', copyEditedSprite);}
+    if(!pixelCanvas.dataset.paintBound){
+      pixelCanvas.dataset.paintBound='1';
+      var drawing=false;
+      pixelCanvas.addEventListener('mousedown',function(ev){ if(!pixelLoaded) return; pushUndo(); drawing=true; paintAt(ev); });
+      window.addEventListener('mouseup',function(){ drawing=false; });
+      pixelCanvas.addEventListener('mousemove',function(ev){ if(drawing) paintAt(ev); });
+      pixelCanvas.addEventListener('contextmenu',function(ev){
+        ev.preventDefault();
+        if(undoStack.length && pixelCtx){
+          var last=undoStack.pop();
+          pixelCtx.putImageData(last,0,0);
+        }
+      });
+    }
+    updatePixelZoom();
+  }
+  initPixelEditor();
+  setTimeout(initPixelEditor, 300);
+
+  try{
+    var originalSelectSprite=selectSprite;
+    selectSprite=function(i){
+      originalSelectSprite(i);
+      setTimeout(function(){
+        var info=document.getElementById('pixelInfo');
+        if(info && state && state.sprites && state.sprites[i]) info.textContent='Selected: '+state.sprites[i].name+' | Tekan Load Selected Sprite untuk edit pixel.';
+      },0);
+    };
+  }catch(e){}
+})();
+</script>
+
+
+<script>
+(function(){
+  const themeNames={naruto:'Naruto',sasuke:'Sasuke / Sakura',hinata:'Hinata',kakashi:'Kakashi',sai:'Sai',yamato:'Yamato'};
+  function setTheme(name){
+    const body=document.body;
+    body.classList.remove('theme-naruto','theme-sasuke','theme-hinata','theme-kakashi','theme-sai','theme-yamato');
+    body.classList.add('theme-'+name);
+    document.querySelectorAll('.theme-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.theme===name));
+    const dashTheme=document.querySelector('.dash-grid .stat-card:last-child b'); if(dashTheme) dashTheme.textContent=themeNames[name]||name;
+    const statusTheme=[...document.querySelectorAll('.ff-statusbar span')].find(x=>x.textContent.startsWith('Theme:')); if(statusTheme) statusTheme.textContent='Theme: '+(themeNames[name]||name);
+    try{localStorage.setItem('nff_theme',name)}catch(e){}
+  }
+  document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>setTheme(btn.dataset.theme)));
+  try{const saved=localStorage.getItem('nff_theme'); if(saved && themeNames[saved]) setTheme(saved);}catch(e){}
+
+  const routeMap={project:['def','cmd','cns','air','st','act','txt','zip'],sprite:['png','jpg','jpeg','webp','gif','sff'],sound:['wav','mp3','ogg','snd'],swf:['swf'],inspect:['sff','snd','swf','zip'],text:['def','cmd','cns','air','st','txt']};
+  const baseLabels={dashboard:'Dashboard',project:'Project',swf:'SWF Extract',sprite:'Sprite Edit',sound:'Sound Edit',mugen:'MUGEN Builder',inspect:'SFF / SND Inspector',text:'Text Editor',export:'Export'};
+  function computeRouteStats(){
+    const stats={project:0,sprite:0,sound:0,swf:0,inspect:0,text:0};
+    (state.files||[]).forEach(f=>{const e=(f.ext||'').toLowerCase(); Object.keys(routeMap).forEach(k=>{if(routeMap[k].includes(e)) stats[k]++;});});
+    return stats;
+  }
+  function refreshTabBadges(){
+    const s=computeRouteStats();
+    Object.entries(baseLabels).forEach(([k,label])=>{const btn=document.querySelector('.tab[data-tab="'+k+'"]'); if(!btn) return; let n=0; if(k==='project')n=s.project; else if(k==='swf')n=s.swf; else if(k==='sprite')n=s.sprite; else if(k==='sound')n=s.sound; else if(k==='inspect')n=s.inspect; else if(k==='text')n=s.text; btn.textContent=label+(n?(' ('+n+')'):'');});
+  }
+  function updateProjectRoutingInfo(){
+    const box=document.getElementById('projectRouteInfo'); if(!box) return;
+    const s=computeRouteStats();
+    box.innerHTML='Project routing: <b>'+s.sprite+' sprite</b> ke Sprite Edit, <b>'+s.sound+' sound</b> ke Sound Edit, <b>'+s.text+' text/project file</b> ke Project & Text Editor, <b>'+s.inspect+' inspectable file</b> ke Inspector. Export di luar tab menyimpan semuanya sebagai satu project.';
+    refreshTabBadges();
+  }
+  const originalAddFiles=addFiles;
+  addFiles=async function(list){await originalAddFiles(list); updateProjectRoutingInfo();};
+  const saveProjectBtn=document.getElementById('btnSaveProject'); if(saveProjectBtn) saveProjectBtn.addEventListener('click',()=>document.getElementById('btnExportAll').click());
+  updateProjectRoutingInfo();
+})();
+</script>
+
+
+<script>
+(function(){
+  function applyViewportMode(){
+    document.body.classList.toggle('is-mobile', window.innerWidth < 981);
+    document.body.classList.toggle('is-desktop', window.innerWidth >= 981);
+  }
+  applyViewportMode();
+  window.addEventListener('resize', applyViewportMode);
+})();
+</script>
+
+</body>
+</html>
